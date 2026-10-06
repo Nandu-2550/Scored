@@ -2,7 +2,7 @@
 
 import React, { useState, useId } from 'react';
 import Link from 'next/link';
-import { useOrganizations, useUserProfile, calculateAge, generatePlayerId, DEMO_PROFILES } from '@/lib/user-org-store';
+import { useOrganizations, useUserProfile, calculateAge } from '@/lib/user-org-store';
 import { SportType } from '@/types/sports';
 import { UserRole } from '@/types/user-org';
 import { ALL_SPORTS, SPORTS_REGISTRY } from '@/lib/sports-config';
@@ -22,6 +22,7 @@ import {
   CheckCircle2, 
   AlertCircle,
   Eye,
+  EyeOff,
   ArrowLeftRight,
   Table2,
   Check,
@@ -38,17 +39,17 @@ import {
   RefreshCw,
   Phone,
   Mail,
-  ChevronRight
+  ChevronRight,
+  Lock
 } from 'lucide-react';
 
 export default function HomeDashboard() {
   const { organizations, createOrganization, joinOrganizationWithCode } = useOrganizations();
-  const { profile, toggleRole, setRole, loginUser, registerUser, logoutUser, isLoaded } = useUserProfile();
+  const { profile, toggleRole, setRole, loginUser, loginWithCredentials, registerUser, logoutUser, isLoaded } = useUserProfile();
 
   // Auth / Registration Portal State
   const [authMode, setAuthMode] = useState<'register' | 'login'>('register');
   const [regFullName, setRegFullName] = useState('');
-  const [regPlayerId, setRegPlayerId] = useState(() => generatePlayerId());
   const [regDob, setRegDob] = useState('2002-05-18');
   const [regGender, setRegGender] = useState<'Male' | 'Female' | 'Other' | 'Prefer not to say'>('Male');
   const [regCountry, setRegCountry] = useState('India');
@@ -56,8 +57,14 @@ export default function HomeDashboard() {
   const [regCity, setRegCity] = useState('Bengaluru');
   const [regPhone, setRegPhone] = useState('+91 98450 12345');
   const [regEmail, setRegEmail] = useState('');
-  const [regRole, setRegRole] = useState<UserRole>('viewer');
-  const [customLoginId, setCustomLoginId] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [showRegPassword, setShowRegPassword] = useState(false);
+
+  // Sign In Form State (Phone or Email + Password)
+  const [loginIdentifier, setLoginIdentifier] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // Search & Filters for Viewer / Organizer Hubs
   const [searchQuery, setSearchQuery] = useState('');
@@ -176,31 +183,50 @@ export default function HomeDashboard() {
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!regFullName.trim()) return;
+    setAuthError(null);
+    if (!regFullName.trim()) {
+      setAuthError('Please enter your full name.');
+      return;
+    }
+    if (!regPhone.trim() && !regEmail.trim()) {
+      setAuthError('Please enter either a phone number or an email address.');
+      return;
+    }
+    if (!regPassword.trim() || regPassword.length < 4) {
+      setAuthError('Please set a password of at least 4 characters.');
+      return;
+    }
 
     registerUser({
       fullName: regFullName.trim(),
-      playerId: regPlayerId.trim() || generatePlayerId(),
       dob: regDob,
       gender: regGender,
       country: regCountry,
       state: regState,
       city: regCity,
-      phone: regPhone,
-      email: regEmail,
-      role: regRole
+      phone: regPhone.trim(),
+      email: regEmail.trim(),
+      password: regPassword,
+      role: 'viewer'
     });
   };
 
-  const handleCustomLogin = (e: React.FormEvent) => {
+  const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const id = customLoginId.trim() || 'SCR-88419';
-    loginUser({
-      id: `usr-${Date.now()}`,
-      playerId: id,
-      fullName: id.startsWith('SCR-') ? `Athlete (${id})` : id,
-      role: 'viewer'
-    });
+    setAuthError(null);
+    if (!loginIdentifier.trim()) {
+      setAuthError('Please enter your registered phone number or email address.');
+      return;
+    }
+    if (!loginPassword) {
+      setAuthError('Please enter your account password.');
+      return;
+    }
+
+    const res = loginWithCredentials(loginIdentifier.trim(), loginPassword);
+    if (!res.success) {
+      setAuthError(res.message || 'Login failed. Please check your credentials.');
+    }
   };
 
   // -------------------------------------------------------------------------
@@ -219,76 +245,48 @@ export default function HomeDashboard() {
             Welcome to <span className="text-blue-600 font-mono">SCORED.</span>
           </h1>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            The next-generation tournament engine for grassroots sports. Register your athlete or organizer profile to discover organizations, manage sports, and track live scorecards.
+            The next-generation tournament engine for grassroots sports. Register your profile to discover organizations, manage sports, and track live scorecards.
           </p>
         </div>
 
         {/* Glassmorphic Portal Card */}
         <div className="glass-panel p-6 sm:p-10 max-w-2xl mx-auto shadow-2xl relative overflow-hidden">
-          {/* Tabs for Registration vs Quick Sign-In */}
-          <div className="flex border-b border-slate-200/80 mb-8">
-            <button
-              onClick={() => setAuthMode('register')}
-              className={`flex-1 pb-3 text-sm font-bold text-center border-b-2 transition-all ${
-                authMode === 'register'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Create Profile (Register)
-            </button>
-            <button
-              onClick={() => setAuthMode('login')}
-              className={`flex-1 pb-3 text-sm font-bold text-center border-b-2 transition-all ${
-                authMode === 'login'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Instant Demo / Sign In
-            </button>
-          </div>
-
           {authMode === 'register' ? (
             /* Registration Form */
             <form onSubmit={handleRegisterSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 mb-2">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={regFullName}
-                    onChange={(e) => setRegFullName(e.target.value)}
-                    placeholder="e.g. Rohit Sharma"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
-                  />
+                  <h2 className="text-lg font-bold text-slate-900">Player Registration</h2>
+                  <p className="text-xs text-slate-500">Create your account to access tournaments, organizations, and match scorecards.</p>
                 </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                      Unique Player ID
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setRegPlayerId(generatePlayerId())}
-                      className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1"
-                    >
-                      <RefreshCw className="w-3 h-3" /> Shuffle
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={regPlayerId}
-                    onChange={(e) => setRegPlayerId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 font-mono text-sm font-bold text-blue-700"
-                  />
-                </div>
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                  New Player
+                </span>
               </div>
 
+              {authError && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              {/* Full Name */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Full Athlete / User Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={regFullName}
+                  onChange={(e) => setRegFullName(e.target.value)}
+                  placeholder="e.g. Rohit Sharma"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
+                />
+              </div>
+
+              {/* Date of Birth & Gender */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
@@ -366,22 +364,25 @@ export default function HomeDashboard() {
                 </div>
               </div>
 
-              {/* Contact Info */}
+              {/* Contact Info (Used for Login) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Phone Number
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    Phone Number *
                   </label>
                   <input
                     type="tel"
+                    required
                     value={regPhone}
                     onChange={(e) => setRegPhone(e.target.value)}
                     placeholder="+91 98450 12345"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-slate-400" />
                     Email Address
                   </label>
                   <input
@@ -389,49 +390,47 @@ export default function HomeDashboard() {
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     placeholder="player@scored.in"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
                   />
                 </div>
               </div>
 
-              {/* Preferred Initial Role */}
+              {/* Set Account Password */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  Select Initial Role (Can toggle anytime)
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    Set Account Password *
+                  </span>
+                  <span className="text-[10px] font-normal text-slate-400">Min. 4 characters</span>
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="relative">
+                  <input
+                    type={showRegPassword ? "text" : "password"}
+                    required
+                    minLength={4}
+                    value={regPassword}
+                    onChange={(e) => setRegPassword(e.target.value)}
+                    placeholder="Choose a password to secure your account"
+                    className="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
+                  />
                   <button
                     type="button"
-                    onClick={() => setRegRole('viewer')}
-                    className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
-                      regRole === 'viewer'
-                        ? 'bg-blue-50/90 border-blue-500 ring-2 ring-blue-500/20'
-                        : 'bg-white/60 border-slate-200 hover:bg-white'
-                    }`}
+                    onClick={() => setShowRegPassword(!showRegPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                    title={showRegPassword ? "Hide password" : "Show password"}
                   >
-                    <Eye className={`w-5 h-5 mt-0.5 ${regRole === 'viewer' ? 'text-blue-600' : 'text-slate-400'}`} />
-                    <div>
-                      <div className="text-sm font-bold text-slate-900">Viewer (Spectator)</div>
-                      <div className="text-xs text-slate-500">Discover orgs, sports, and live match scores.</div>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setRegRole('organizer')}
-                    className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
-                      regRole === 'organizer'
-                        ? 'bg-amber-50/90 border-amber-500 ring-2 ring-amber-500/20'
-                        : 'bg-white/60 border-slate-200 hover:bg-white'
-                    }`}
-                  >
-                    <ShieldCheck className={`w-5 h-5 mt-0.5 ${regRole === 'organizer' ? 'text-amber-600' : 'text-slate-400'}`} />
-                    <div>
-                      <div className="text-sm font-bold text-slate-900">Organizer</div>
-                      <div className="text-xs text-slate-500">Manage organizations, invite co-organizers & score matches.</div>
-                    </div>
+                    {showRegPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+              </div>
+
+              {/* Player ID Assignment Note */}
+              <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 flex items-start gap-2.5 text-xs text-blue-800">
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                <span>
+                  A unique, permanent <strong>Player ID</strong> will be automatically generated upon completing registration and will be visible in your <strong>Profile</strong>.
+                </span>
               </div>
 
               <button
@@ -441,81 +440,91 @@ export default function HomeDashboard() {
                 <span>Complete Registration & Enter Scored</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-            </form>
-          ) : (
-            /* Quick Sign-In / Demo Access */
-            <div className="space-y-6">
-              <p className="text-xs text-slate-500">
-                Choose a pre-configured demo account to instantly explore either the Organizer or Viewer experience, or sign in with an existing Player ID.
-              </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Demo Organizer */}
+              <div className="pt-3 border-t border-slate-200/80 text-center">
                 <button
-                  onClick={() => loginUser(DEMO_PROFILES.organizer)}
-                  className="glass-panel p-4 text-left border-amber-200/80 hover:border-amber-400 hover:bg-amber-50/60 transition-all group relative overflow-hidden"
+                  type="button"
+                  onClick={() => { setAuthMode('login'); setAuthError(null); }}
+                  className="text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                      Demo Organizer
-                    </span>
-                    <ShieldCheck className="w-4 h-4 text-amber-600" />
-                  </div>
-                  <div className="font-bold text-slate-900">{DEMO_PROFILES.organizer.fullName}</div>
-                  <div className="text-xs text-slate-500 font-mono mb-2">{DEMO_PROFILES.organizer.playerId}</div>
-                  <div className="text-xs text-slate-600">
-                    Lead Organizer @ Apex Grassroots Sports Academy (Bengaluru).
-                  </div>
-                  <div className="mt-3 text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    <span>Sign In as Organizer</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </div>
-                </button>
-
-                {/* Demo Viewer */}
-                <button
-                  onClick={() => loginUser(DEMO_PROFILES.viewer)}
-                  className="glass-panel p-4 text-left border-blue-200/80 hover:border-blue-400 hover:bg-blue-50/60 transition-all group relative overflow-hidden"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
-                      Demo Viewer
-                    </span>
-                    <Eye className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div className="font-bold text-slate-900">{DEMO_PROFILES.viewer.fullName}</div>
-                  <div className="text-xs text-slate-500 font-mono mb-2">{DEMO_PROFILES.viewer.playerId}</div>
-                  <div className="text-xs text-slate-600">
-                    Sports fan browsing tournaments and scorecards in Bengaluru.
-                  </div>
-                  <div className="mt-3 text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    <span>Sign In as Viewer</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </div>
+                  Already have an account? <span className="text-blue-600 underline">Sign In with Phone or Email</span>
                 </button>
               </div>
+            </form>
+          ) : (
+            /* Sign In with Phone or Email + Password */
+            <div className="space-y-6">
+              <div className="space-y-1">
+                <h2 className="text-lg font-bold text-slate-900">Sign In to Scored</h2>
+                <p className="text-xs text-slate-500">Log in using your registered phone number or email address.</p>
+              </div>
 
-              {/* Custom Player ID Sign-In */}
-              <form onSubmit={handleCustomLogin} className="pt-4 border-t border-slate-200/80 space-y-3">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Or Sign In with Player ID
-                </label>
-                <div className="flex gap-2">
+              {authError && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    Phone Number or Email Address *
+                  </label>
                   <input
                     type="text"
-                    value={customLoginId}
-                    onChange={(e) => setCustomLoginId(e.target.value)}
-                    placeholder="e.g. SCR-77491"
-                    className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-mono"
+                    required
+                    value={loginIdentifier}
+                    onChange={(e) => setLoginIdentifier(e.target.value)}
+                    placeholder="e.g. +91 98450 12345 or player@scored.in"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium text-slate-900"
                   />
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-all tactile-btn"
-                  >
-                    Sign In
-                  </button>
                 </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showLoginPassword ? "text" : "password"}
+                      required
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium text-slate-900"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                      title={showLoginPassword ? "Hide password" : "Show password"}
+                    >
+                      {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all tactile-btn flex items-center justify-center gap-2"
+                >
+                  <span>Sign In</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </form>
+
+              <div className="pt-4 border-t border-slate-200/80 text-center">
+                <button
+                  type="button"
+                  onClick={() => { setAuthMode('register'); setAuthError(null); }}
+                  className="text-xs font-bold text-blue-600 hover:underline"
+                >
+                  ← Don't have an account? Register Now
+                </button>
+              </div>
             </div>
           )}
         </div>

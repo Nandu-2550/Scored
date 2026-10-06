@@ -6,8 +6,41 @@ import { SportType } from '@/types/sports';
 import { supabase, isSupabaseConfigured } from './supabase';
 
 const PROFILE_STORAGE_KEY = 'scored_user_profile_v2';
+const USERS_DB_STORAGE_KEY = 'scored_registered_accounts_v1';
 const ORGS_STORAGE_KEY = 'scored_organizations_v2';
 const ORG_BROADCAST_CHANNEL_NAME = 'scored_org_sync';
+
+export function getRegisteredUsers(): UserProfile[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(USERS_DB_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveRegisteredUser(user: UserProfile) {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getRegisteredUsers();
+    const cleanEmail = user.email?.toLowerCase().trim();
+    const cleanPhone = user.phone?.replace(/\s+/g, '');
+    const existingIdx = current.findIndex(u => 
+      (cleanEmail && u.email && u.email.toLowerCase().trim() === cleanEmail) ||
+      (cleanPhone && u.phone && u.phone.replace(/\s+/g, '') === cleanPhone) ||
+      (user.playerId && u.playerId && u.playerId === user.playerId)
+    );
+    if (existingIdx >= 0) {
+      current[existingIdx] = user;
+    } else {
+      current.push(user);
+    }
+    localStorage.setItem(USERS_DB_STORAGE_KEY, JSON.stringify(current));
+  } catch {
+    // ignore
+  }
+}
 
 let broadcastChannel: BroadcastChannel | null = null;
 if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
@@ -62,7 +95,7 @@ export const INITIAL_USER_PROFILE: UserProfile = {
   phone: '+91 98450 12345',
   email: 'rajesh.kumar@scored.in',
   avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-  role: 'organizer', // Fluid mode: 'viewer' | 'organizer'
+  role: 'viewer', // Default mode: 'viewer' (spectator)
   activeOrgId: 'org-apex-01',
   isLoggedIn: false, // Default to false so new visitors encounter Step 1: Login / Register
   updatedAt: new Date().toISOString()
@@ -269,6 +302,7 @@ export function useUserProfile() {
       const next: UserProfile = {
         ...prev,
         ...updated,
+        playerId: prev.playerId, // Unique Player ID is permanent and cannot be changed
         age: updated.dob ? calculateAge(updated.dob) : prev.age,
         updatedAt: new Date().toISOString()
       };
@@ -368,7 +402,6 @@ export function useUserProfile() {
 
   const registerUser = useCallback((formData: {
     fullName: string;
-    playerId?: string;
     dob: string;
     gender: 'Male' | 'Female' | 'Other' | 'Prefer not to say';
     country: string;
@@ -376,10 +409,12 @@ export function useUserProfile() {
     city: string;
     phone?: string;
     email?: string;
+    password?: string;
     role?: UserRole;
   }) => {
     const age = calculateAge(formData.dob);
-    const playerId = formData.playerId || generatePlayerId();
+    // Unique player ID is automatically generated upon registration - never exposed in registration form
+    const playerId = generatePlayerId();
     const next: UserProfile = {
       id: `usr-${Date.now()}`,
       playerId,
@@ -392,11 +427,13 @@ export function useUserProfile() {
       city: formData.city,
       phone: formData.phone || '',
       email: formData.email || '',
-      role: formData.role || 'viewer',
+      password: formData.password || '',
+      role: formData.role || 'viewer', // default to viewer
       isLoggedIn: true,
       updatedAt: new Date().toISOString()
     };
 
+    saveRegisteredUser(next);
     setProfileState(next);
 
     if (typeof window !== 'undefined') {
@@ -431,6 +468,88 @@ export function useUserProfile() {
     return next;
   }, []);
 
+  const loginWithCredentials = useCallback((identifier: string, password: string): { success: boolean; message?: string } => {
+    const rawId = identifier.trim();
+    if (!rawId) {
+      return { success: false, message: 'Please enter your phone number or email address.' };
+    }
+    if (!password) {
+      return { success: false, message: 'Please enter your password.' };
+    }
+
+    const cleanId = rawId.toLowerCase();
+    const cleanPhone = rawId.replace(/[\s\-\(\)\+]/g, '');
+
+    const users = getRegisteredUsers();
+    // Search registered users
+    let found = users.find(u => {
+      const uEmail = u.email?.trim().toLowerCase();
+      const uPhone = u.phone?.replace(/[\s\-\(\)\+]/g, '');
+      const uPlayerId = u.playerId?.trim().toLowerCase();
+      return (
+        (uEmail && uEmail === cleanId) ||
+        (uPhone && (uPhone === cleanPhone || (cleanPhone.length >= 8 && uPhone.includes(cleanPhone)) || (uPhone.length >= 8 && cleanPhone.includes(uPhone)))) ||
+        (uPlayerId && uPlayerId === cleanId)
+      );
+    });
+
+    // Fallback: check currently saved profile or initial/demo profiles
+    if (!found) {
+      const candidates = [profile, INITIAL_USER_PROFILE, DEMO_PROFILES.organizer, DEMO_PROFILES.viewer];
+      for (const cand of candidates) {
+        if (!cand) continue;
+        const uEmail = cand.email?.trim().toLowerCase();
+        const uPhone = cand.phone?.replace(/[\s\-\(\)\+]/g, '');
+        const uPlayerId = cand.playerId?.trim().toLowerCase();
+        if (
+          (uEmail && uEmail === cleanId) ||
+          (uPhone && (uPhone === cleanPhone || (cleanPhone.length >= 8 && uPhone.includes(cleanPhone)))) ||
+          (uPlayerId && uPlayerId === cleanId)
+        ) {
+          found = cand;
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      return { 
+        success: false, 
+        message: 'No account found matching this phone number or email address. Please register a new account.' 
+      };
+    }
+
+    // If account has a password set, verify it
+    if (found.password && found.password !== password) {
+      return { 
+        success: false, 
+        message: 'Incorrect password. Please verify and try again.' 
+      };
+    }
+
+    const next: UserProfile = {
+      ...found,
+      isLoggedIn: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    saveRegisteredUser(next);
+    setProfileState(next);
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(next));
+        if (broadcastChannel) {
+          broadcastChannel.postMessage({ type: 'PROFILE_UPDATED', profile: next });
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return { success: true };
+  }, [profile]);
+
   const logoutUser = useCallback(() => {
     setProfileState(prev => {
       const next: UserProfile = {
@@ -458,6 +577,7 @@ export function useUserProfile() {
     toggleRole, 
     setRole, 
     loginUser, 
+    loginWithCredentials,
     registerUser, 
     logoutUser, 
     isLoaded 

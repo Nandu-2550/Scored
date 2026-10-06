@@ -370,14 +370,16 @@ export default function OrganizationDetailPage() {
               </button>
             )}
 
-            {/* Create Match for this Org */}
-            <Link
-              href="/matches/new"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20"
-            >
-              <PlusCircle className="w-4 h-4 stroke-[2.5]" />
-              <span>+ Score Match</span>
-            </Link>
+            {/* Create Match for this Org - Organizers Only */}
+            {isOrganizer && (
+              <Link
+                href="/matches/new"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20"
+              >
+                <PlusCircle className="w-4 h-4 stroke-[2.5]" />
+                <span>+ Score Match</span>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -501,19 +503,23 @@ export default function OrganizationDetailPage() {
                 <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
                   <Link
                     href={`/matches/${m.id}`}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs border border-slate-200 transition-colors shadow-2xs"
+                    className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs border border-slate-200 transition-colors shadow-2xs ${
+                      isOrganizer ? 'flex-1' : 'w-full'
+                    }`}
                   >
                     <Eye className="w-3.5 h-3.5 text-blue-600" />
                     <span>Spectator View</span>
                   </Link>
 
-                  <Link
-                    href={`/matches/${m.id}/score`}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors shadow-2xs"
-                  >
-                    <PenTool className="w-3.5 h-3.5" />
-                    <span>Scorer Console</span>
-                  </Link>
+                  {isOrganizer && (
+                    <Link
+                      href={`/matches/${m.id}/score`}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors shadow-2xs"
+                    >
+                      <PenTool className="w-3.5 h-3.5" />
+                      <span>Scorer Console</span>
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
@@ -522,13 +528,15 @@ export default function OrganizationDetailPage() {
               <div className="col-span-full p-8 text-center rounded-2xl bg-white border border-slate-200 text-xs text-slate-500 space-y-3 shadow-xs">
                 <Trophy className="w-8 h-8 text-slate-300 mx-auto" />
                 <p>No active matches found matching your sport drill-down under {org.name}.</p>
-                <Link
-                  href="/matches/new"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 shadow-xs"
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  <span>Setup First Match for this Sport</span>
-                </Link>
+                {isOrganizer && (
+                  <Link
+                    href="/matches/new"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 shadow-xs"
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    <span>Setup First Match for this Sport</span>
+                  </Link>
+                )}
               </div>
             )}
           </div>

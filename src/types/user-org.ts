@@ -14,6 +14,7 @@ export interface UserProfile {
   city: string;
   phone?: string;
   email?: string;
+  password?: string;
   avatarUrl?: string;
   role: UserRole; // Fluid toggle between 'viewer' and 'organizer'
   activeOrgId?: string;

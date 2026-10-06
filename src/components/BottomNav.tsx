@@ -7,17 +7,13 @@ import {
   Building2, 
   Layers, 
   Table2, 
-  User, 
-  ShieldCheck, 
-  Eye,
-  PlusCircle
+  User 
 } from 'lucide-react';
 import { useUserProfile } from '@/lib/user-org-store';
 
 export const BottomNav: React.FC = () => {
   const pathname = usePathname();
-  const { profile, toggleRole } = useUserProfile();
-  const isOrganizer = profile.role === 'organizer';
+  const { profile } = useUserProfile();
 
   if (!profile.isLoggedIn) {
     return null;
@@ -52,24 +48,6 @@ export const BottomNav: React.FC = () => {
             </Link>
           );
         })}
-
-        {/* Quick Role Toggle in Mobile Bottom Bar */}
-        <button
-          onClick={toggleRole}
-          title="Click to toggle Viewer / Organizer Mode"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-colors ${
-            isOrganizer ? 'text-amber-600 font-bold' : 'text-slate-500 font-medium'
-          }`}
-        >
-          {isOrganizer ? (
-            <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
-          ) : (
-            <Eye className="w-5 h-5 stroke-[1.75]" />
-          )}
-          <span className="text-[10px] mt-0.5 tracking-tight">
-            {isOrganizer ? 'Organizer' : 'Viewer'}
-          </span>
-        </button>
       </div>
     </nav>
   );

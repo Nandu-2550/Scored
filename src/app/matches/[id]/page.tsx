@@ -12,6 +12,7 @@ import { VolleyballScorecard } from '@/components/spectator/VolleyballScorecard'
 import { KabaddiScorecard } from '@/components/spectator/KabaddiScorecard';
 import { CricketScoreState, SetRallyScoreState, KabaddiScoreState } from '@/types/sports';
 import { copyToClipboard } from '@/lib/clipboard';
+import { useUserProfile } from '@/lib/user-org-store';
 import { 
   Radio, 
   ArrowLeft, 
@@ -20,13 +21,16 @@ import {
   MapPin, 
   Info, 
   ListOrdered, 
-  Check
+  Check,
+  Eye
 } from 'lucide-react';
 
 export default function SpectatorMatchCenterPage() {
   const params = useParams();
   const matchId = params?.id as string;
   const { match } = useMatch(matchId);
+  const { profile } = useUserProfile();
+  const isOrganizer = profile.role === 'organizer';
 
   const [activeTab, setActiveTab] = useState<'commentary' | 'scorecard' | 'info'>('commentary');
   const [copied, setCopied] = useState(false);
@@ -266,15 +270,22 @@ export default function SpectatorMatchCenterPage() {
             })()}
           </div>
 
-          {/* Quick link to Scorer Console */}
+          {/* Scorer Console Access (Organizers Only) */}
           <div className="flex items-center justify-end">
-            <Link
-              href={`/matches/${match.id}/score`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-200 transition-colors shadow-2xs"
-            >
-              <PenTool className="w-4 h-4 text-blue-600" />
-              <span>Switch to Scorer Console</span>
-            </Link>
+            {isOrganizer ? (
+              <Link
+                href={`/matches/${match.id}/score`}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/20"
+              >
+                <PenTool className="w-4 h-4 text-white" />
+                <span>Switch to Scorer Console</span>
+              </Link>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] font-semibold text-slate-500">
+                <Eye className="w-3.5 h-3.5 text-blue-600" />
+                <span>Viewing in Spectator Mode • Scores are live & read-only</span>
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -16,7 +16,8 @@ import {
   VolleyballAction,
   KabaddiAction
 } from '@/lib/scoring-engine';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { useUserProfile } from '@/lib/user-org-store';
+import { ArrowLeft, AlertCircle, Eye, ShieldCheck, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MatchScorerConsolePage() {
@@ -24,7 +25,50 @@ export default function MatchScorerConsolePage() {
   const router = useRouter();
   const matchId = params?.id as string;
   const { match, updateMatch } = useMatch(matchId);
+  const { profile, isLoaded } = useUserProfile();
   const [lastActionText, setLastActionText] = useState<string | undefined>(undefined);
+
+  const isOrganizer = profile.role === 'organizer';
+
+  // Security & Perspective Enforcement: Viewers cannot make any score changes
+  if (isLoaded && !isOrganizer) {
+    return (
+      <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full glass-panel p-8 rounded-3xl border border-amber-500/30 bg-slate-900/90 text-white space-y-6 shadow-2xl animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+            <Lock className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-[10px] font-black tracking-widest uppercase text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              Viewer Mode Active
+            </span>
+            <h2 className="text-xl font-bold text-white pt-2">Scorer Console Restricted</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              In Viewer Mode, you can only spectate live match scores. Making score adjustments and operating the referee console is reserved exclusively for Organizers.
+            </p>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <Link
+              href={`/matches/${matchId}`}
+              className="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/25"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Open Spectator View</span>
+            </Link>
+            <Link
+              href="/profile"
+              className="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all border border-slate-700"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <span>Shift Mode in Profile</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!match) {
     return (

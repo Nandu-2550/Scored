@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useUserProfile, calculateAge, generatePlayerId } from '@/lib/user-org-store';
+import { useUserProfile, calculateAge } from '@/lib/user-org-store';
 import { copyToClipboard } from '@/lib/clipboard';
 import { ImageUploader } from '@/components/ImageUploader';
 import { 
@@ -12,17 +12,19 @@ import {
   Eye, 
   CheckCircle2, 
   Copy, 
-  RefreshCw, 
   ArrowLeftRight,
   IdCard,
   Check,
   Building2,
-  ArrowRight
+  ArrowRight,
+  Lock
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-  const { profile, updateProfile, toggleRole, isLoaded } = useUserProfile();
+  const router = useRouter();
+  const { profile, updateProfile, setRole, isLoaded } = useUserProfile();
 
   const [fullName, setFullName] = useState(profile.fullName);
   const [playerId, setPlayerId] = useState(profile.playerId);
@@ -31,6 +33,8 @@ export default function ProfilePage() {
   const [country, setCountry] = useState(profile.country);
   const [state, setState] = useState(profile.state);
   const [city, setCity] = useState(profile.city);
+  const [phone, setPhone] = useState(profile.phone || '');
+  const [email, setEmail] = useState(profile.email || '');
   const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl || '');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
@@ -45,6 +49,8 @@ export default function ProfilePage() {
       setCountry(profile.country);
       setState(profile.state);
       setCity(profile.city);
+      setPhone(profile.phone || '');
+      setEmail(profile.email || '');
       setAvatarUrl(profile.avatarUrl || '');
     }
   }, [isLoaded, profile]);
@@ -61,6 +67,8 @@ export default function ProfilePage() {
       country,
       state,
       city,
+      phone,
+      email,
       avatarUrl,
     });
     setSaveSuccess(true);
@@ -73,9 +81,9 @@ export default function ProfilePage() {
     setTimeout(() => setCopiedId(false), 2000);
   };
 
-  const handleRegenerateId = () => {
-    const newId = generatePlayerId();
-    setPlayerId(newId);
+  const handleShiftMode = (targetRole: 'viewer' | 'organizer') => {
+    setRole(targetRole);
+    router.push('/');
   };
 
   const isOrganizer = profile.role === 'organizer';
@@ -97,32 +105,39 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* Fluid Role Toggle Button */}
+        {/* Shift Perspective Button */}
         <button
           type="button"
-          onClick={toggleRole}
-          className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all shadow-xs ${
+          onClick={() => handleShiftMode(isOrganizer ? 'viewer' : 'organizer')}
+          title={isOrganizer ? 'Shift to Viewer Mode and open Viewer Hub' : 'Shift to Organizer Mode and open Organizer Hub'}
+          className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all shadow-xs group hover:scale-[1.01] active:scale-[0.99] ${
             isOrganizer
-              ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
-              : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
+              ? 'bg-blue-50/90 border-blue-200 text-blue-900 hover:bg-blue-100 hover:border-blue-300'
+              : 'bg-amber-50/90 border-amber-300 text-amber-900 hover:bg-amber-100 hover:border-amber-400'
           }`}
         >
-          <div className="flex items-center gap-2">
-            {isOrganizer ? (
-              <ShieldCheck className="w-5 h-5 text-amber-600" />
-            ) : (
-              <Eye className="w-5 h-5 text-blue-600" />
-            )}
+          <div className="flex items-center gap-2.5">
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+              isOrganizer ? 'bg-blue-200/60 text-blue-800' : 'bg-amber-200/60 text-amber-800'
+            }`}>
+              {isOrganizer ? (
+                <Eye className="w-4 h-4 stroke-[2.5]" />
+              ) : (
+                <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
+              )}
+            </div>
             <div className="text-left">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block leading-none">
-                Active Perspective
+              <span className={`text-[10px] uppercase font-extrabold block leading-none ${
+                isOrganizer ? 'text-blue-700' : 'text-amber-700'
+              }`}>
+                Current: {isOrganizer ? 'Organizer Mode' : 'Viewer Mode (Default)'}
               </span>
-              <span className="text-sm font-black capitalize">
-                {profile.role} Mode
+              <span className="text-xs font-black text-slate-900 flex items-center gap-1 mt-0.5">
+                {isOrganizer ? 'Shift to Viewer Mode' : 'Shift to Organizer Mode'}
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </div>
           </div>
-          <ArrowLeftRight className="w-4 h-4 text-slate-400" />
         </button>
       </div>
 
@@ -156,12 +171,18 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Unique Player ID Badge with 1-Click Copy */}
+            {/* Unique Player ID Badge with 1-Click Copy (Permanent & Immutable) */}
             <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider block">
-                Unique Player ID
-              </span>
               <div className="flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-slate-400" />
+                  Unique Player ID
+                </span>
+                <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                  Permanent
+                </span>
+              </div>
+              <div className="flex items-center justify-between pt-0.5">
                 <span className="font-mono text-base font-black text-blue-700 tracking-wider">
                   {playerId}
                 </span>
@@ -173,14 +194,6 @@ export default function ProfilePage() {
                     className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-blue-600 shadow-2xs"
                   >
                     {copiedId ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleRegenerateId}
-                    title="Generate New ID"
-                    className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-blue-600 shadow-2xs"
-                  >
-                    <RefreshCw className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -197,6 +210,62 @@ export default function ProfilePage() {
                 <span className="text-sm font-bold text-slate-900">{gender}</span>
               </div>
             </div>
+          </div>
+
+          {/* Perspective & Role Shift Card */}
+          <div className={`glass-panel p-6 rounded-3xl shadow-lg space-y-4 border ${
+            isOrganizer 
+              ? 'border-amber-200/80 bg-gradient-to-b from-amber-50/50 to-white' 
+              : 'border-blue-200/80 bg-gradient-to-b from-blue-50/50 to-white'
+          }`}>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">
+                Mode & Perspective Control
+              </span>
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                isOrganizer ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-blue-100 text-blue-800 border border-blue-300'
+              }`}>
+                {isOrganizer ? 'Organizer Active' : 'Viewer Mode (Default)'}
+              </span>
+            </div>
+
+            {isOrganizer ? (
+              <div className="space-y-3">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Organizer Mode Active</h4>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    You currently have access to create and manage organizations, configure sports, and operate official live scoring consoles.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleShiftMode('viewer')}
+                  className="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <Eye className="w-4 h-4 stroke-[2.5]" />
+                  <span>Shift to Viewer Mode & Open Hub</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Viewer Mode (Default)</h4>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    You are exploring as a fan, attendee, and athlete. Shift to Organizer Mode whenever you want to host events, manage sports clubs, or score matches.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleShiftMode('organizer')}
+                  className="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs shadow-md shadow-amber-500/25 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
+                  <span>Shift to Organizer Mode & Open Hub</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Cloudinary Media Upload Component */}
@@ -307,6 +376,30 @@ export default function ProfilePage() {
                     type="text"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Contact Credentials */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Phone Number (Login ID)</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+91 98450 12345"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Email Address (Login ID)</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="player@scored.in"
                     className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
                   />
                 </div>

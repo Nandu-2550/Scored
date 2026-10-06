@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SportType, Match, Team, SportScoreState } from '@/types/sports';
 import { SPORTS_REGISTRY, ALL_SPORTS } from '@/lib/sports-config';
 import { saveSingleMatch } from '@/lib/match-store';
+import { useUserProfile } from '@/lib/user-org-store';
 import { SportBadge } from '@/components/SportBadge';
 import { ImageUploader } from '@/components/ImageUploader';
 import { 
@@ -16,11 +17,17 @@ import {
   Settings2, 
   Users, 
   Flame,
-  Coins
+  Coins,
+  Lock,
+  Eye,
+  ShieldCheck
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function MatchSetupWizardPage() {
   const router = useRouter();
+  const { profile, isLoaded } = useUserProfile();
+  const isOrganizer = profile.role === 'organizer';
 
   // Step state
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -232,6 +239,46 @@ export default function MatchSetupWizardPage() {
     saveSingleMatch(newMatch);
     router.push(`/matches/${matchId}/score`);
   };
+
+  // Security & Perspective Enforcement: Viewers cannot create matches
+  if (isLoaded && !isOrganizer) {
+    return (
+      <div className="min-h-[75vh] flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full glass-panel p-8 rounded-3xl border border-amber-500/30 bg-slate-900/90 text-white space-y-6 shadow-2xl animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+            <Lock className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-[10px] font-black tracking-widest uppercase text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              Viewer Mode Active
+            </span>
+            <h2 className="text-xl font-bold text-white pt-2">Match Creation Restricted</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              In Viewer Mode, you can discover organizations and explore live scores across all sports. Setting up tournaments and creating live matches is restricted to Organizers.
+            </p>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/"
+              className="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/25"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Explore Matches</span>
+            </Link>
+            <Link
+              href="/profile"
+              className="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all border border-slate-700"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <span>Shift Mode in Profile</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
