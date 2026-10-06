@@ -33,33 +33,33 @@ export default function MatchScorerConsolePage() {
   // Security & Perspective Enforcement: Viewers cannot make any score changes
   if (isLoaded && !isOrganizer) {
     return (
-      <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full glass-panel p-8 rounded-3xl border border-amber-500/30 bg-slate-900/90 text-white space-y-6 shadow-2xl animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+      <div className="min-h-screen bg-[#050814] flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+        <div className="max-w-md w-full liquid-glass p-6 sm:p-8 rounded-3xl border border-amber-500/30 text-white space-y-6 shadow-2xl animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
             <Lock className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <span className="text-[10px] font-black tracking-widest uppercase text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+            <span className="text-[10px] font-black tracking-widest uppercase text-amber-400 bg-amber-500/15 px-3 py-1 rounded-full border border-amber-500/30">
               Viewer Mode Active
             </span>
-            <h2 className="text-xl font-bold text-white pt-2">Scorer Console Restricted</h2>
+            <h2 className="text-xl sm:text-2xl font-black text-white pt-2">Scorer Console Restricted</h2>
             <p className="text-xs text-slate-400 leading-relaxed">
-              In Viewer Mode, you can only spectate live match scores. Making score adjustments and operating the referee console is reserved exclusively for Organizers.
+              In Viewer Mode, you can only spectate live match scores. Operating the referee console and adjusting scores is reserved exclusively for Organizers.
             </p>
           </div>
 
           <div className="pt-2 flex flex-col sm:flex-row gap-3">
             <Link
               href={`/matches/${matchId}`}
-              className="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/25"
+              className="flex-1 min-h-[46px] py-3 px-4 rounded-xl liquid-btn-primary text-white font-bold text-xs flex items-center justify-center gap-2 transition-all tactile-btn cursor-pointer"
             >
               <Eye className="w-4 h-4" />
               <span>Open Spectator View</span>
             </Link>
             <Link
               href="/profile"
-              className="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all border border-slate-700"
+              className="flex-1 min-h-[46px] py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all border border-white/10 tactile-btn cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4 text-amber-400" />
               <span>Shift Mode in Profile</span>
@@ -73,14 +73,16 @@ export default function MatchScorerConsolePage() {
   if (!match) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
-        <AlertCircle className="w-12 h-12 text-slate-500" />
+        <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500">
+          <AlertCircle className="w-8 h-8" />
+        </div>
         <h2 className="text-xl font-bold text-white">Match Not Found</h2>
         <p className="text-xs text-slate-400 max-w-sm">
-          The requested match ID <code className="text-emerald-400">{matchId}</code> could not be located in live memory or storage.
+          The requested match ID <code className="text-cyan-400 font-mono">{matchId}</code> could not be located in live memory or storage.
         </p>
         <Link
           href="/"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 text-slate-200 text-xs font-bold hover:bg-slate-700"
+          className="min-h-[44px] flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold border border-white/10 tactile-btn cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Return to Dashboard</span>

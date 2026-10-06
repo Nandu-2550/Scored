@@ -75,7 +75,9 @@ export const CommentaryFeed: React.FC<CommentaryFeedProps> = ({ events }) => {
                     </span>
                   )}
                 </div>
-                <span className="text-[11px] text-slate-500 font-mono">{timeString}</span>
+                <span suppressHydrationWarning className="text-[11px] text-slate-500 font-mono">
+                  {timeString}
+                </span>
               </div>
               <p className="text-sm text-slate-200 leading-relaxed font-sans">{ev.description}</p>
             </div>

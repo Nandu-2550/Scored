@@ -25,9 +25,9 @@ export const SportBadge: React.FC<SportBadgeProps> = ({ sport, showIcon = true, 
   const IconComponent = SportIconMap[sport] || Trophy;
 
   const sizeClasses = {
-    sm: 'text-xs px-2 py-0.5 gap-1',
-    md: 'text-xs font-semibold px-2.5 py-1 gap-1.5',
-    lg: 'text-sm font-bold px-3.5 py-1.5 gap-2',
+    sm: 'text-[11px] px-2.5 py-0.5 gap-1.5 font-bold',
+    md: 'text-xs font-semibold px-3 py-1 gap-1.5',
+    lg: 'text-sm font-bold px-4 py-1.5 gap-2',
   }[size];
 
   const iconSizes = {
@@ -38,10 +38,16 @@ export const SportBadge: React.FC<SportBadgeProps> = ({ sport, showIcon = true, 
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border ${config.accentBorder} ${config.badgeBg} ${config.badgeText} tracking-wide uppercase transition-colors ${sizeClasses}`}
+      className={`inline-flex items-center rounded-full border backdrop-blur-md tracking-wider uppercase transition-all ${sizeClasses}`}
+      style={{
+        borderColor: `${config.accentColor}60`,
+        backgroundColor: `${config.accentColor}18`,
+        color: '#f8fafc',
+        boxShadow: `0 0 14px -2px ${config.accentColor}35, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+      }}
     >
-      {showIcon && <IconComponent className={iconSizes} />}
-      {config.name}
+      {showIcon && <IconComponent className={iconSizes} style={{ color: config.accentColor }} />}
+      <span>{config.name}</span>
     </span>
   );
 };

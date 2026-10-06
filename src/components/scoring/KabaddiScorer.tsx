@@ -87,10 +87,13 @@ export const KabaddiScorer: React.FC<KabaddiScorerProps> = ({ match, onAction })
   return (
     <div className="space-y-4 max-w-4xl mx-auto pb-12">
       {/* 1. KABADDI SCOREBOARD HUD */}
-      <div className="rounded-2xl bg-gradient-to-b from-[#251508] to-[#120b05] border border-amber-500/30 p-4 sm:p-6 shadow-2xl relative overflow-hidden">
-        <div className="flex items-center justify-between border-b border-amber-900/40 pb-3 mb-4">
+      <div className="rounded-2xl sm:rounded-3xl liquid-glass border border-white/10 p-4 sm:p-6 shadow-2xl relative overflow-hidden">
+        {/* Amber glow backdrop */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-xs tracking-wider uppercase">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-400 font-extrabold text-xs tracking-wider uppercase shadow-[0_0_10px_rgba(245,158,11,0.2)]">
               {score.half === 1 ? '1st Half' : '2nd Half'}
             </span>
             <span className="text-xs text-slate-400 font-mono">
@@ -178,7 +181,7 @@ export const KabaddiScorer: React.FC<KabaddiScorerProps> = ({ match, onAction })
       </div>
 
       {/* 2. RAIDER ATTACK ACTION GRID */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-[#140e0a] border border-amber-500/30 shadow-xl space-y-4">
+      <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl liquid-glass border border-white/10 shadow-xl space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
             <Zap className="w-4 h-4" />
@@ -240,7 +243,7 @@ export const KabaddiScorer: React.FC<KabaddiScorerProps> = ({ match, onAction })
       </div>
 
       {/* 3. DEFENSE TACKLE & ALL-OUT ACTIONS */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-[#0d1424] border border-cyan-500/30 shadow-xl space-y-4">
+      <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl liquid-glass border border-white/10 shadow-xl space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
           <ShieldAlert className="w-4 h-4" />
           Defending Team ({isTeamARaiding ? teamB.name : teamA.name}) Tackles

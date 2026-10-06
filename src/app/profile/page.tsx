@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useUserProfile, calculateAge } from '@/lib/user-org-store';
 import { copyToClipboard } from '@/lib/clipboard';
 import { ImageUploader } from '@/components/ImageUploader';
-import { 
-  User, 
-  Calendar, 
-  MapPin, 
-  ShieldCheck, 
-  Eye, 
-  CheckCircle2, 
-  Copy, 
+import {
+  User,
+  Calendar,
+  MapPin,
+  ShieldCheck,
+  Eye,
+  CheckCircle2,
+  Copy,
   ArrowLeftRight,
   IdCard,
   Check,
@@ -91,16 +91,16 @@ export default function ProfilePage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-2 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
             <IdCard className="w-3.5 h-3.5" />
             <span>Digital Athlete Profile</span>
           </div>
-          <h1 className="text-3xl font-black text-slate-900 font-mono tracking-tight">
+          <h1 className="text-3xl font-black text-white font-mono tracking-tight">
             Athlete & Organizer Profile
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             Manage your personal sports identity, demographic credentials, and role permissions.
           </p>
         </div>
@@ -110,16 +110,14 @@ export default function ProfilePage() {
           type="button"
           onClick={() => handleShiftMode(isOrganizer ? 'viewer' : 'organizer')}
           title={isOrganizer ? 'Shift to Viewer Mode and open Viewer Hub' : 'Shift to Organizer Mode and open Organizer Hub'}
-          className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all shadow-xs group hover:scale-[1.01] active:scale-[0.99] ${
-            isOrganizer
-              ? 'bg-blue-50/90 border-blue-200 text-blue-900 hover:bg-blue-100 hover:border-blue-300'
-              : 'bg-amber-50/90 border-amber-300 text-amber-900 hover:bg-amber-100 hover:border-amber-400'
-          }`}
+          className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all shadow-md group hover:scale-[1.01] active:scale-[0.99] cursor-pointer ${isOrganizer
+            ? 'bg-cyan-950/50 border-cyan-500/40 text-cyan-200 hover:bg-cyan-900/50 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+            : 'bg-amber-950/50 border-amber-500/40 text-amber-200 hover:bg-amber-900/50 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+            }`}
         >
           <div className="flex items-center gap-2.5">
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-              isOrganizer ? 'bg-blue-200/60 text-blue-800' : 'bg-amber-200/60 text-amber-800'
-            }`}>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isOrganizer ? 'bg-cyan-500/20 text-cyan-300' : 'bg-amber-500/20 text-amber-300'
+              }`}>
               {isOrganizer ? (
                 <Eye className="w-4 h-4 stroke-[2.5]" />
               ) : (
@@ -127,12 +125,11 @@ export default function ProfilePage() {
               )}
             </div>
             <div className="text-left">
-              <span className={`text-[10px] uppercase font-extrabold block leading-none ${
-                isOrganizer ? 'text-blue-700' : 'text-amber-700'
-              }`}>
+              <span className={`text-[10px] uppercase font-extrabold block leading-none ${isOrganizer ? 'text-cyan-400' : 'text-amber-400'
+                }`}>
                 Current: {isOrganizer ? 'Organizer Mode' : 'Viewer Mode (Default)'}
               </span>
-              <span className="text-xs font-black text-slate-900 flex items-center gap-1 mt-0.5">
+              <span className="text-xs font-black text-white flex items-center gap-1 mt-0.5">
                 {isOrganizer ? 'Shift to Viewer Mode' : 'Shift to Organizer Mode'}
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </span>
@@ -145,45 +142,43 @@ export default function ProfilePage() {
         {/* Left Column: Athlete ID Card & Avatar */}
         <div className="space-y-6">
           {/* Digital Sports Card */}
-          <div className="glass-panel p-6 rounded-3xl space-y-5 shadow-lg relative overflow-hidden">
+          <div className="liquid-glass p-6 rounded-3xl space-y-5 shadow-2xl relative overflow-hidden border border-white/10">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
                 Scored Pass
               </span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                isOrganizer ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-blue-50 text-blue-700 border border-blue-200'
-              }`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isOrganizer ? 'bg-amber-950/60 text-amber-300 border border-amber-500/40' : 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40'
+                }`}>
                 {profile.role.toUpperCase()}
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-cyan-950/60 border border-cyan-500/40 overflow-hidden flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-8 h-8 text-blue-600" />
+                  <User className="w-8 h-8 text-cyan-400" />
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="text-lg font-bold text-slate-900 truncate">{fullName}</h3>
-                <p className="text-xs text-slate-500">{city}, {state}</p>
+                <h3 className="text-lg font-bold text-white truncate">{fullName}</h3>
+                <p className="text-xs text-slate-400">{city}, {state}</p>
               </div>
             </div>
 
             {/* Unique Player ID Badge with 1-Click Copy (Permanent & Immutable) */}
-            <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
+            <div className="p-3.5 rounded-2xl bg-[#080d22]/90 border border-white/10 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-slate-400" />
-                  Unique Player ID
+                  Player ID
                 </span>
-                <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                <span className="text-[9px] font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/40">
                   Permanent
                 </span>
               </div>
               <div className="flex items-center justify-between pt-0.5">
-                <span className="font-mono text-base font-black text-blue-700 tracking-wider">
+                <span className="font-mono text-base font-black text-cyan-400 tracking-wider">
                   {playerId}
                 </span>
                 <div className="flex items-center gap-1">
@@ -191,9 +186,9 @@ export default function ProfilePage() {
                     type="button"
                     onClick={handleCopyId}
                     title="Copy Player ID"
-                    className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-blue-600 shadow-2xs"
+                    className="p-1.5 rounded-lg bg-white/10 border border-white/15 text-slate-300 hover:text-white cursor-pointer transition-colors"
                   >
-                    {copiedId ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    {copiedId ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -201,30 +196,28 @@ export default function ProfilePage() {
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-2 gap-2 text-center">
-              <div className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/80">
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
                 <span className="text-[10px] text-slate-400 block font-bold">Auto Age</span>
-                <span className="text-base font-black text-slate-900 font-mono">{computedAge} yrs</span>
+                <span className="text-base font-black text-white font-mono">{computedAge} yrs</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/80">
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
                 <span className="text-[10px] text-slate-400 block font-bold">Gender</span>
-                <span className="text-sm font-bold text-slate-900">{gender}</span>
+                <span className="text-sm font-bold text-white">{gender}</span>
               </div>
             </div>
           </div>
 
           {/* Perspective & Role Shift Card */}
-          <div className={`glass-panel p-6 rounded-3xl shadow-lg space-y-4 border ${
-            isOrganizer 
-              ? 'border-amber-200/80 bg-gradient-to-b from-amber-50/50 to-white' 
-              : 'border-blue-200/80 bg-gradient-to-b from-blue-50/50 to-white'
-          }`}>
+          <div className={`glass-panel p-6 rounded-3xl shadow-xl space-y-4 border ${isOrganizer
+            ? 'border-amber-500/40 bg-gradient-to-b from-amber-950/30 to-[#070b19]'
+            : 'border-cyan-500/40 bg-gradient-to-b from-cyan-950/30 to-[#070b19]'
+            }`}>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
                 Mode & Perspective Control
               </span>
-              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                isOrganizer ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-blue-100 text-blue-800 border border-blue-300'
-              }`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${isOrganizer ? 'bg-amber-950/60 text-amber-300 border border-amber-500/40' : 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40'
+                }`}>
                 {isOrganizer ? 'Organizer Active' : 'Viewer Mode (Default)'}
               </span>
             </div>
@@ -232,15 +225,15 @@ export default function ProfilePage() {
             {isOrganizer ? (
               <div className="space-y-3">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Organizer Mode Active</h4>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  <h4 className="text-sm font-bold text-white">Organizer Mode Active</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                     You currently have access to create and manage organizations, configure sports, and operate official live scoring consoles.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => handleShiftMode('viewer')}
-                  className="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/25 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                  className="w-full py-3 px-4 rounded-2xl liquid-btn-primary text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
                 >
                   <Eye className="w-4 h-4 stroke-[2.5]" />
                   <span>Shift to Viewer Mode & Open Hub</span>
@@ -250,15 +243,15 @@ export default function ProfilePage() {
             ) : (
               <div className="space-y-3">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Viewer Mode (Default)</h4>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  <h4 className="text-sm font-bold text-white">Viewer Mode (Default)</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                     You are exploring as a fan, attendee, and athlete. Shift to Organizer Mode whenever you want to host events, manage sports clubs, or score matches.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => handleShiftMode('organizer')}
-                  className="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs shadow-md shadow-amber-500/25 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                  className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md shadow-amber-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
                 >
                   <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                   <span>Shift to Organizer Mode & Open Hub</span>
@@ -269,27 +262,27 @@ export default function ProfilePage() {
           </div>
 
           {/* Cloudinary Media Upload Component */}
-          <div className="glass-panel p-6 rounded-3xl shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-slate-900">Profile Photo</h3>
+          <div className="glass-panel p-6 rounded-3xl shadow-xl space-y-4 border border-white/10">
+            <h3 className="text-sm font-bold text-white">Profile Photo</h3>
             <ImageUploader
               label="Athlete Avatar (Cloudinary)"
               currentUrl={avatarUrl}
               folder="player-profiles"
-              onUploadSuccess={(url) => setAvatarUrl(url)}
+              onUploadSuccess={(url: string) => setAvatarUrl(url)}
             />
           </div>
         </div>
 
         {/* Right Column: Profile Edit Form */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSave} className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6 shadow-lg">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <form onSubmit={handleSave} className="liquid-glass p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl border border-white/10">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Demographic & Player Details</h2>
-                <p className="text-xs text-slate-500">Auto-calculates tournament age eligibility from date of birth.</p>
+                <h2 className="text-lg font-bold text-white">Demographic & Player Details</h2>
+                <p className="text-xs text-slate-400">Auto-calculates tournament age eligibility from date of birth.</p>
               </div>
               {saveSuccess && (
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-fade-in">
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold animate-fade-in shadow-[0_0_10px_rgba(16,185,129,0.25)]">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Profile Saved!</span>
                 </div>
@@ -298,22 +291,22 @@ export default function ProfilePage() {
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">
-                  Full Athlete Name <span className="text-blue-600">*</span>
+                <label className="text-xs font-bold text-slate-300 block mb-1">
+                  Full Athlete Name <span className="text-cyan-400">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">
-                    Date of Birth <span className="text-blue-600">*</span>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">
+                    Date of Birth <span className="text-cyan-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -321,28 +314,28 @@ export default function ProfilePage() {
                       required
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden [color-scheme:dark]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">
+                  <label className="text-xs font-bold text-slate-300 block mb-1">
                     Auto-Calculated Age
                   </label>
-                  <div className="px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 font-mono text-sm font-bold flex items-center justify-between">
+                  <div className="px-4 py-2.5 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-200 font-mono text-sm font-bold flex items-center justify-between shadow-[0_0_10px_rgba(6,182,212,0.15)]">
                     <span>{computedAge} Years Old</span>
-                    <span className="text-[10px] text-blue-600 font-sans font-semibold uppercase">Auto System</span>
+                    <span className="text-[10px] text-cyan-400 font-sans font-semibold uppercase">Auto System</span>
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Gender</label>
+                <label className="text-xs font-bold text-slate-300 block mb-1">Gender</label>
                 <select
                   value={gender}
                   onChange={(e: any) => setGender(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden [&>option]:bg-[#080d22] [&>option]:text-white"
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -353,30 +346,30 @@ export default function ProfilePage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">City</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">City</label>
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">State</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">State</label>
                   <input
                     type="text"
                     value={state}
                     onChange={(e) => setState(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Country</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">Country</label>
                   <input
                     type="text"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -384,32 +377,32 @@ export default function ProfilePage() {
               {/* Contact Credentials */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Phone Number (Login ID)</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">Phone Number (Login ID)</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+91 98450 12345"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Email Address (Login ID)</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">Email Address (Login ID)</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="player@scored.in"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl glass-input text-white text-sm focus:outline-hidden"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <div className="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20"
+                className="px-6 py-2.5 rounded-xl liquid-btn-primary font-bold text-xs cursor-pointer shadow-md"
               >
                 Save Profile Changes
               </button>

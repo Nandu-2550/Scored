@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  Table2, 
   Menu, 
   X, 
-  Flame, 
   Building2, 
   User, 
   Layers 
@@ -21,33 +19,32 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'Discovery Hub', href: '/', icon: Building2 },
-    { label: 'Directory', href: '/organizations', icon: Layers },
-    { label: 'Points Tables', href: '/standings', icon: Table2 },
+    { label: 'Organizations', href: '/organizations', icon: Layers },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/60 bg-white/75 backdrop-blur-md shadow-xs">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#070b19]/90 backdrop-blur-xl shadow-lg shadow-black/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                <Flame className="w-6 h-6 text-white stroke-[2.5]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-black tracking-wider text-slate-900 font-mono flex items-center gap-0.5">
-                  SCORED<span className="text-blue-600">.</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500 -mt-1">
-                  Multi-Sport Hub
-                </span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation - Only visible when logged in */}
+        <div className="relative flex items-center justify-between h-16 sm:h-20">
+          
+          {/* ============================================================ */}
+          {/* LEFT SECTION: Desktop Navigation or Mobile Menu Trigger      */}
+          {/* ============================================================ */}
+          <div className="flex items-center gap-2 sm:gap-4 z-10">
+            {/* Mobile menu trigger */}
             {profile.isLoggedIn && (
-              <nav className="hidden lg:flex items-center gap-1 pl-4 border-l border-slate-200/80">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 sm:hidden rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10 tactile-btn cursor-pointer"
+                aria-label="Toggle navigation"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            )}
+
+            {/* Desktop Navigation Links (Left Side) */}
+            {profile.isLoggedIn && (
+              <nav className="hidden lg:flex items-center gap-1.5">
                 {navLinks.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
@@ -55,13 +52,13 @@ export const Navbar: React.FC = () => {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${
+                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                         isActive
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
+                          ? 'bg-white/10 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+                          : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
                       {item.label}
                     </Link>
                   );
@@ -70,64 +67,89 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Right Header Elements - Only visible when logged in */}
-          {profile.isLoggedIn && (
-            <div className="hidden sm:flex items-center gap-3">
-              {/* User Profile Badge */}
-              <div className="flex items-center gap-1.5">
+          {/* ============================================================ */}
+          {/* CENTER SECTION: SCORED Official Logo (Perfect Center)        */}
+          {/* ============================================================ */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-20 pointer-events-auto">
+            <Link href="/" className="flex items-center justify-center group py-1" aria-label="SCORED Home">
+              <div className="relative flex items-center justify-center">
+                {/* Subtle Neon Backlight Aura */}
+                <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full scale-125 pointer-events-none -z-10 group-hover:bg-cyan-400/35 group-hover:scale-135 transition-all duration-300" />
+                <img
+                  src="/scored-logo.png"
+                  alt="SCORED - All Sports, All Scores, One Place"
+                  className="h-11 sm:h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_18px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-all duration-300"
+                />
+              </div>
+            </Link>
+          </div>
+
+          {/* ============================================================ */}
+          {/* RIGHT SECTION: User Profile / Actions                        */}
+          {/* ============================================================ */}
+          <div className="flex items-center gap-2 sm:gap-3 z-10">
+            {profile.isLoggedIn ? (
+              <>
+                {/* Desktop Profile Pill */}
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    href="/profile"
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all glass-panel ${
+                      pathname === '/profile'
+                        ? 'bg-cyan-950/40 border-cyan-400/50 text-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400/30'
+                        : 'border-white/10 text-slate-200 hover:border-cyan-400/40 hover:bg-white/10'
+                    }`}
+                  >
+                    {profile.avatarUrl ? (
+                      <img
+                        src={profile.avatarUrl}
+                        alt={profile.fullName}
+                        className="w-5 h-5 rounded-full object-cover border border-cyan-500/30"
+                      />
+                    ) : (
+                      <User className="w-4 h-4 text-cyan-400" />
+                    )}
+                    <span className="font-mono text-[11px] text-cyan-300 font-bold">{profile.playerId}</span>
+                  </Link>
+                  <button
+                    onClick={logoutUser}
+                    title="Sign Out / Switch Profile"
+                    className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/30 transition-all text-xs cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Mobile Profile Icon Button */}
                 <Link
                   href="/profile"
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all glass-panel ${
-                    pathname === '/profile'
-                      ? 'bg-blue-50/90 border-blue-400 text-blue-900 ring-2 ring-blue-500/20'
-                      : 'border-white/60 text-slate-700 hover:border-slate-300 hover:bg-white/90'
-                  }`}
+                  className="sm:hidden flex items-center gap-1.5 p-1.5 rounded-xl bg-white/5 border border-white/10 text-cyan-300 text-xs font-mono font-bold tactile-btn"
+                  title="My Profile"
                 >
                   {profile.avatarUrl ? (
                     <img
                       src={profile.avatarUrl}
                       alt={profile.fullName}
-                      className="w-5 h-5 rounded-full object-cover border border-slate-200"
+                      className="w-6 h-6 rounded-full object-cover border border-cyan-400/40"
                     />
                   ) : (
-                    <User className="w-4 h-4 text-slate-500" />
+                    <div className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-400/40 flex items-center justify-center">
+                      <User className="w-3.5 h-3.5 text-cyan-400" />
+                    </div>
                   )}
-                  <span className="font-mono text-[11px] text-blue-700 font-bold">{profile.playerId}</span>
                 </Link>
-                <button
-                  onClick={logoutUser}
-                  title="Sign Out / Switch Profile"
-                  className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-all text-xs"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          )}
+              </>
+            ) : (
+              <div className="w-6 sm:w-8" aria-hidden="true" />
+            )}
+          </div>
 
-          {/* Mobile menu trigger - Only visible when logged in */}
-          {profile.isLoggedIn && (
-            <div className="flex items-center gap-2 sm:hidden">
-              <Link
-                href="/profile"
-                className="p-1.5 rounded-lg bg-slate-100 border border-slate-200 text-blue-600"
-              >
-                <User className="w-4 h-4" />
-              </Link>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
       {/* Mobile Menu Dropdown - Only visible when logged in */}
       {profile.isLoggedIn && mobileMenuOpen && (
-        <div className="sm:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2 shadow-lg animate-fade-in">
+        <div className="sm:hidden border-b border-white/10 bg-[#080d22]/95 backdrop-blur-2xl px-4 pt-2 pb-4 space-y-2 shadow-2xl animate-fade-in">
           {navLinks.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -137,7 +159,7 @@ export const Navbar: React.FC = () => {
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold ${
-                  isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'
+                  isActive ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30' : 'text-slate-300 hover:bg-white/5'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -145,15 +167,15 @@ export const Navbar: React.FC = () => {
               </Link>
             );
           })}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 px-1">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Role: <strong className="text-slate-900 capitalize">{profile.role}</strong>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+              Role: <strong className="text-white capitalize">{profile.role}</strong>
             </span>
             <Link
               href="/profile"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-xs text-blue-600 font-bold hover:underline"
+              className="text-xs text-cyan-400 font-bold hover:underline"
             >
               Profile Settings
             </Link>

@@ -115,7 +115,7 @@ export const DEMO_PROFILES: { [key in 'organizer' | 'viewer']: UserProfile } = {
     phone: '+91 98450 12345',
     email: 'rajesh.kumar@scored.in',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    role: 'organizer',
+    role: 'viewer', // Spectator mode by default
     activeOrgId: 'org-apex-01',
     isLoggedIn: true,
     updatedAt: new Date().toISOString()

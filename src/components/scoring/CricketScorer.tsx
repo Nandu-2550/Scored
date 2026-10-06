@@ -81,11 +81,11 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
   return (
     <div className="space-y-4 max-w-4xl mx-auto pb-12">
       {/* 1. TOP LIVE SCOREBOARD HUD */}
-      <div className="rounded-2xl bg-gradient-to-b from-[#131b2e] to-[#0c1220] border border-slate-800 p-4 sm:p-6 shadow-2xl relative overflow-hidden">
+      <div className="rounded-2xl sm:rounded-3xl liquid-glass border border-white/10 p-4 sm:p-6 shadow-2xl relative overflow-hidden">
         {/* Glow backdrop */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400">
@@ -225,7 +225,7 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
       </div>
 
       {/* 2. MAIN TACTILE RUNS ACTION GRID */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-[#0e1628] border border-slate-800 shadow-xl space-y-4">
+      <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl liquid-glass border border-white/10 shadow-xl space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Field Scorer Input Panel (Touch-Ready)
@@ -305,25 +305,29 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
         </div>
       </div>
 
-      {/* WICKET MODAL */}
+      {/* WICKET MODAL (Mobile Bottom Sheet on Phone, Centered Modal on Desktop) */}
       {wicketModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-red-500/40 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-md p-0 sm:p-4 animate-fade-in">
+          <div className="mobile-bottom-sheet w-full max-w-md rounded-t-3xl sm:rounded-3xl liquid-glass border border-red-500/40 p-5 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto touch-scroll safe-pb-dock">
+            {/* Mobile Drag Pill */}
+            <div className="w-12 h-1.5 bg-white/25 rounded-full mx-auto mb-2 sm:hidden" />
+
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2 text-red-400 font-bold">
-                <ShieldAlert className="w-5 h-5" />
-                <h3 className="text-lg text-white">Record Dismissal</h3>
+                <ShieldAlert className="w-5 h-5 shrink-0" />
+                <h3 className="text-lg text-white font-black tracking-tight">Record Dismissal</h3>
               </div>
               <button
+                type="button"
                 onClick={() => setWicketModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-slate-800 text-slate-400"
+                className="p-1.5 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-400">
-              Dismissing batsman: <strong className="text-white">{striker.name}</strong> ({striker.runs} off {striker.balls} balls)
+            <p className="text-xs text-slate-300">
+              Dismissing batsman: <strong className="text-white font-bold">{striker.name}</strong> ({striker.runs} off {striker.balls} balls)
             </p>
 
             {/* Dismissal Type Selector */}
@@ -335,10 +339,10 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
                     key={type}
                     type="button"
                     onClick={() => setDismissalType(type)}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold uppercase border transition-all ${
+                    className={`min-h-[44px] py-2 px-2 rounded-xl text-xs font-bold uppercase border transition-all tactile-btn cursor-pointer ${
                       dismissalType === type
-                        ? 'bg-red-500 text-white border-red-400 shadow-md'
-                        : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                        ? 'bg-red-500 text-white border-red-400 shadow-md shadow-red-500/25'
+                        : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'
                     }`}
                   >
                     {type}
@@ -355,7 +359,7 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
                 placeholder="e.g. Dinesh Karthik"
                 value={newBatsmanName}
                 onChange={(e) => setNewBatsmanName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-red-500 font-medium"
+                className="glass-input w-full px-3.5 py-3 rounded-xl text-white text-base sm:text-sm font-medium focus:border-red-400"
               />
             </div>
 
@@ -363,14 +367,14 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
               <button
                 type="button"
                 onClick={() => setWicketModalOpen(false)}
-                className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm"
+                className="flex-1 min-h-[48px] py-3 rounded-xl bg-white/10 hover:bg-white/15 text-slate-300 font-bold text-sm tactile-btn cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleWicketSubmit}
-                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm shadow-lg shadow-red-600/30"
+                className="flex-1 min-h-[48px] py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black text-sm shadow-lg shadow-red-600/30 tactile-btn cursor-pointer"
               >
                 Confirm Wicket
               </button>
@@ -379,32 +383,37 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
         </div>
       )}
 
-      {/* CHANGE BOWLER MODAL */}
+      {/* CHANGE BOWLER MODAL (Mobile Bottom Sheet on Phone, Centered Modal on Desktop) */}
       {bowlerModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-cyan-500/40 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white">Select Next Bowler</h3>
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-md p-0 sm:p-4 animate-fade-in">
+          <div className="mobile-bottom-sheet w-full max-w-md rounded-t-3xl sm:rounded-3xl liquid-glass border border-cyan-500/40 p-5 sm:p-6 shadow-2xl space-y-4 max-h-[88vh] flex flex-col safe-pb-dock">
+            {/* Mobile Drag Pill */}
+            <div className="w-12 h-1.5 bg-white/25 rounded-full mx-auto mb-2 sm:hidden" />
+
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="text-lg font-black text-white tracking-tight">Select Next Bowler</h3>
               <button
+                type="button"
                 onClick={() => setBowlerModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-slate-800 text-slate-400"
+                className="p-1.5 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[55vh] overflow-y-auto touch-scroll pr-1">
               {bowlingTeam.players.map((p) => (
                 <button
                   key={p.id}
+                  type="button"
                   onClick={() => {
                     onAction({ type: 'CHANGE_BOWLER', bowlerId: p.id, bowlerName: p.name });
                     setBowlerModalOpen(false);
                   }}
-                  className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+                  className={`w-full min-h-[52px] p-3 rounded-2xl border text-left flex items-center justify-between transition-all tactile-btn cursor-pointer ${
                     score.currentBowlerId === p.id
-                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300'
-                      : 'bg-slate-800/80 border-slate-700 hover:bg-slate-800 text-white'
+                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
                   }`}
                 >
                   <div>
@@ -412,7 +421,7 @@ export const CricketScorer: React.FC<CricketScorerProps> = ({ match, onAction })
                     <span className="text-xs text-slate-400">{p.role || 'Bowler'} #{p.jerseyNumber || ''}</span>
                   </div>
                   {score.bowlers[p.id] && (
-                    <span className="text-xs font-mono text-slate-400">
+                    <span className="text-xs font-mono text-cyan-300">
                       {score.bowlers[p.id].wickets} wkts / {score.bowlers[p.id].overs} ov
                     </span>
                   )}

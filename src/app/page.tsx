@@ -9,17 +9,17 @@ import { ALL_SPORTS, SPORTS_REGISTRY } from '@/lib/sports-config';
 import { SportBadge } from '@/components/SportBadge';
 import { ImageUploader } from '@/components/ImageUploader';
 import { copyToClipboard } from '@/lib/clipboard';
-import { 
-  Building2, 
-  Search, 
-  PlusCircle, 
-  KeyRound, 
-  Users, 
-  MapPin, 
-  ShieldCheck, 
-  ArrowRight, 
-  X, 
-  CheckCircle2, 
+import {
+  Building2,
+  Search,
+  PlusCircle,
+  KeyRound,
+  Users,
+  MapPin,
+  ShieldCheck,
+  ArrowRight,
+  X,
+  CheckCircle2,
   AlertCircle,
   Eye,
   EyeOff,
@@ -33,7 +33,6 @@ import {
   Calendar,
   User,
   Compass,
-  Zap,
   Activity,
   LogOut,
   RefreshCw,
@@ -55,7 +54,7 @@ export default function HomeDashboard() {
   const [regCountry, setRegCountry] = useState('India');
   const [regState, setRegState] = useState('Karnataka');
   const [regCity, setRegCity] = useState('Bengaluru');
-  const [regPhone, setRegPhone] = useState('+91 98450 12345');
+  const [regPhone, setRegPhone] = useState('+91 ');
   const [regEmail, setRegEmail] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [showRegPassword, setShowRegPassword] = useState(false);
@@ -79,7 +78,7 @@ export default function HomeDashboard() {
   // Create Org Form State
   const [newOrgName, setNewOrgName] = useState('');
   const [newCreatorName, setNewCreatorName] = useState(profile.fullName || 'Rajesh Kumar');
-  const [newCreatorPhone, setNewCreatorPhone] = useState(profile.phone || '+91 98450 12345');
+  const [newCreatorPhone, setNewCreatorPhone] = useState(profile.phone || '+91 ');
   const [newCity, setNewCity] = useState(profile.city || 'Bengaluru');
   const [newState, setNewState] = useState(profile.state || 'Karnataka');
   const [newDescription, setNewDescription] = useState('');
@@ -234,38 +233,52 @@ export default function HomeDashboard() {
   // -------------------------------------------------------------------------
   if (isLoaded && !profile.isLoggedIn) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8 sm:py-16">
+      <div className="max-w-4xl mx-auto px-3.5 sm:px-4 py-4 sm:py-16">
         {/* Header Hero */}
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-700 bg-blue-50/90 border border-blue-200/80 shadow-xs">
-            <Flame className="w-4 h-4 text-blue-600" />
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 space-y-3 sm:space-y-4">
+          <div className="flex justify-center mb-2">
+            <div className="relative">
+              <div className="absolute inset-0 bg-cyan-500/25 blur-2xl rounded-full scale-125 pointer-events-none" />
+              <img
+                src="/scored-logo.png"
+                alt="SCORED Logo"
+                className="h-24 sm:h-36 w-auto object-contain drop-shadow-[0_0_35px_rgba(6,182,212,0.6)] animate-fade-in relative z-10"
+              />
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
             <span>Grassroots Multi-Sport Platform</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-            Welcome to <span className="text-blue-600 font-mono">SCORED.</span>
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            Welcome to <span className="font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]">SCORED</span>
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed px-1">
             The next-generation tournament engine for grassroots sports. Register your profile to discover organizations, manage sports, and track live scorecards.
           </p>
         </div>
 
         {/* Glassmorphic Portal Card */}
-        <div className="glass-panel p-6 sm:p-10 max-w-2xl mx-auto shadow-2xl relative overflow-hidden">
+        <div className="liquid-glass p-4 sm:p-10 max-w-2xl mx-auto border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative overflow-hidden rounded-2xl sm:rounded-3xl">
+          {/* Subtle Ambient Refractive Highlights */}
+          <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-cyan-500/15 blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-48 h-48 rounded-full bg-purple-500/15 blur-2xl pointer-events-none" />
+
           {authMode === 'register' ? (
             /* Registration Form */
-            <form onSubmit={handleRegisterSubmit} className="space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 mb-2">
+            <form onSubmit={handleRegisterSubmit} className="space-y-4 sm:space-y-5 relative z-10">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-1">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Player Registration</h2>
-                  <p className="text-xs text-slate-500">Create your account to access tournaments, organizations, and match scorecards.</p>
+                  <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>Registration</span>
+                    <Sparkles className="w-4 h-4 text-cyan-400" />
+                  </h2>
+                  <p className="text-[11px] sm:text-xs text-slate-400">Create your account to access tournaments, organizations, and match scorecards.</p>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  New Player
-                </span>
               </div>
 
               {authError && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{authError}</span>
                 </div>
@@ -273,27 +286,27 @@ export default function HomeDashboard() {
 
               {/* Full Name */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Full Athlete / User Name *
+                <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                  Full Name *
                 </label>
                 <input
                   type="text"
                   required
                   value={regFullName}
                   onChange={(e) => setRegFullName(e.target.value)}
-                  placeholder="e.g. Rohit Sharma"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
+                  placeholder="e.g. Nandeesh Gavayi"
+                  className="w-full px-3.5 py-2.5 sm:py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
               </div>
 
               {/* Date of Birth & Gender */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider">
                       Date of Birth *
                     </label>
-                    <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="text-[10px] sm:text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.25)]">
                       Age: {calculatedLiveAge} Yrs
                     </span>
                   </div>
@@ -302,18 +315,18 @@ export default function HomeDashboard() {
                     required
                     value={regDob}
                     onChange={(e) => setRegDob(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm text-white focus:outline-hidden [color-scheme:dark]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Gender *
                   </label>
                   <select
                     value={regGender}
                     onChange={(e) => setRegGender(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white focus:outline-hidden [&>option]:bg-[#080d22] [&>option]:text-white"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -326,18 +339,18 @@ export default function HomeDashboard() {
               {/* Location Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Country
                   </label>
                   <input
                     type="text"
                     value={regCountry}
                     onChange={(e) => setRegCountry(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     State *
                   </label>
                   <input
@@ -346,11 +359,11 @@ export default function HomeDashboard() {
                     value={regState}
                     onChange={(e) => setRegState(e.target.value)}
                     placeholder="e.g. Karnataka"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     City *
                   </label>
                   <input
@@ -359,30 +372,30 @@ export default function HomeDashboard() {
                     value={regCity}
                     onChange={(e) => setRegCity(e.target.value)}
                     placeholder="e.g. Bengaluru"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500"
                   />
                 </div>
               </div>
 
               {/* Contact Info (Used for Login) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-cyan-400" />
                     Phone Number *
                   </label>
                   <input
                     type="tel"
                     required
                     value={regPhone}
+                    placeholder="+91 81237 97004"
                     onChange={(e) => setRegPhone(e.target.value)}
-                    placeholder="+91 98450 12345"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-cyan-400" />
                     Email Address
                   </label>
                   <input
@@ -390,16 +403,16 @@ export default function HomeDashboard() {
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     placeholder="player@scored.in"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                   />
                 </div>
               </div>
 
               {/* Set Account Password */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    <Lock className="w-3.5 h-3.5 text-purple-400" />
                     Set Account Password *
                   </span>
                   <span className="text-[10px] font-normal text-slate-400">Min. 4 characters</span>
@@ -411,13 +424,13 @@ export default function HomeDashboard() {
                     minLength={4}
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    placeholder="Choose a password to secure your account"
-                    className="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium"
+                    placeholder="Choose a password to secure account"
+                    className="w-full px-3.5 py-2.5 pr-10 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                   />
                   <button
                     type="button"
                     onClick={() => setShowRegPassword(!showRegPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors p-1.5"
                     title={showRegPassword ? "Hide password" : "Show password"}
                   >
                     {showRegPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -426,41 +439,44 @@ export default function HomeDashboard() {
               </div>
 
               {/* Player ID Assignment Note */}
-              <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 flex items-start gap-2.5 text-xs text-blue-800">
-                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                <span>
-                  A unique, permanent <strong>Player ID</strong> will be automatically generated upon completing registration and will be visible in your <strong>Profile</strong>.
+              <div className="p-3 sm:p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-start gap-2.5 text-xs text-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                <span className="text-[11px] sm:text-xs leading-relaxed">
+                  A unique, permanent <strong className="text-white">Player ID</strong> will be automatically generated upon completing registration and visible in your <strong className="text-white">Profile</strong>.
                 </span>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all tactile-btn flex items-center justify-center gap-2 mt-4"
+                className="w-full py-3.5 px-4 rounded-xl liquid-btn-primary font-bold text-sm sm:text-base tactile-btn flex items-center justify-center gap-2 mt-4 cursor-pointer min-h-[48px]"
               >
-                <span>Complete Registration & Enter Scored</span>
+                <span>Complete Registration & Enter</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <div className="pt-3 border-t border-slate-200/80 text-center">
+              <div className="pt-3 border-t border-white/10 text-center">
                 <button
                   type="button"
                   onClick={() => { setAuthMode('login'); setAuthError(null); }}
-                  className="text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors"
+                  className="text-xs font-semibold text-slate-400 hover:text-cyan-300 transition-colors py-1 inline-block"
                 >
-                  Already have an account? <span className="text-blue-600 underline">Sign In with Phone or Email</span>
+                  Already have an account? <span className="text-cyan-400 underline underline-offset-4">Sign In</span>
                 </button>
               </div>
             </form>
           ) : (
             /* Sign In with Phone or Email + Password */
-            <div className="space-y-6">
-              <div className="space-y-1">
-                <h2 className="text-lg font-bold text-slate-900">Sign In to Scored</h2>
-                <p className="text-xs text-slate-500">Log in using your registered phone number or email address.</p>
+            <div className="space-y-5 sm:space-y-6 relative z-10">
+              <div className="space-y-1 pb-3 border-b border-white/10">
+                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                  <span>Sign In to Scored</span>
+                  <KeyRound className="w-4 h-4 text-cyan-400" />
+                </h2>
+                <p className="text-[11px] sm:text-xs text-slate-400">Log in using your registered phone number or email address.</p>
               </div>
 
               {authError && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{authError}</span>
                 </div>
@@ -468,8 +484,8 @@ export default function HomeDashboard() {
 
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-cyan-400" />
                     Phone Number or Email Address *
                   </label>
                   <input
@@ -477,14 +493,14 @@ export default function HomeDashboard() {
                     required
                     value={loginIdentifier}
                     onChange={(e) => setLoginIdentifier(e.target.value)}
-                    placeholder="e.g. +91 98450 12345 or player@scored.in"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium text-slate-900"
+                    placeholder="e.g. +91 8123797004 or player@scored.in"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-purple-400" />
                     Password *
                   </label>
                   <div className="relative">
@@ -494,12 +510,12 @@ export default function HomeDashboard() {
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-slate-200 bg-white/80 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden text-sm font-medium text-slate-900"
+                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl glass-input text-base sm:text-sm font-medium text-white placeholder:text-slate-500 focus:outline-hidden"
                     />
                     <button
                       type="button"
                       onClick={() => setShowLoginPassword(!showLoginPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors p-1.5"
                       title={showLoginPassword ? "Hide password" : "Show password"}
                     >
                       {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -509,20 +525,20 @@ export default function HomeDashboard() {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all tactile-btn flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-4 rounded-xl liquid-btn-primary font-bold text-sm sm:text-base tactile-btn flex items-center justify-center gap-2 cursor-pointer mt-4 min-h-[48px]"
                 >
                   <span>Sign In</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
 
-              <div className="pt-4 border-t border-slate-200/80 text-center">
+              <div className="pt-3 border-t border-white/10 text-center">
                 <button
                   type="button"
                   onClick={() => { setAuthMode('register'); setAuthError(null); }}
-                  className="text-xs font-bold text-blue-600 hover:underline"
+                  className="text-xs font-semibold text-slate-400 hover:text-cyan-300 transition-colors py-1 inline-block"
                 >
-                  ← Don't have an account? Register Now
+                  ← Don't have an account? <span className="text-cyan-400 underline underline-offset-4">Register Now</span>
                 </button>
               </div>
             </div>
@@ -540,192 +556,70 @@ export default function HomeDashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-fade-in">
       {/* Website Logo, Description, and Introduction Banner */}
-      <div className="glass-panel p-6 sm:p-8 relative overflow-hidden">
+      <div className="glass-panel p-6 sm:p-8 relative overflow-hidden border border-white/10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-3xl">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
-                <Flame className="w-7 h-7 text-white stroke-[2.5]" />
+            <div className="flex items-center gap-4">
+              <div className="relative shrink-0">
+                <div className="absolute inset-0 bg-cyan-500/25 blur-xl rounded-2xl scale-110 pointer-events-none" />
+                <img
+                  src="/scored-logo.png"
+                  alt="SCORED Logo"
+                  className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.6)] relative z-10"
+                />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
-                    SCORED<span className="text-blue-600">.</span>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-mono">
+                    SCORED<span className="text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">.</span>
                   </h1>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
                     Grassroots Ecosystem
                   </span>
                 </div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
                   Multi-Sport Grassroots Tournament & Organization Platform
                 </p>
               </div>
             </div>
 
-            <p className="text-sm text-slate-600 leading-relaxed pt-1">
+            <p className="text-sm text-slate-300 leading-relaxed pt-1">
               Empowering local grassroots clubs, academies, organizers, and athletes across Cricket, Kabaddi, Kho-Kho, Volleyball, Throwball, Badminton, Table Tennis, and Athletics. Seamlessly host multiple sports, invite co-organizers via secret codes, and broadcast live scorecards to spectators.
             </p>
           </div>
 
           {/* Current Logged-in Profile Badge */}
-          <div className="glass-panel p-4 rounded-xl border border-white/80 bg-white/70 shadow-sm flex items-center justify-between md:flex-col md:items-start gap-3 min-w-[220px]">
+          <div className="glass-panel p-4 rounded-xl border border-white/10 bg-slate-900/60 shadow-lg flex items-center justify-between md:flex-col md:items-start gap-3 min-w-[220px]">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs">
+              <div className="w-9 h-9 rounded-full bg-cyan-950/80 border border-cyan-400/40 flex items-center justify-center text-cyan-300 font-bold text-xs shadow-[0_0_10px_rgba(6,182,212,0.25)]">
                 {profile.fullName ? profile.fullName.charAt(0) : 'U'}
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900">{profile.fullName}</div>
-                <div className="text-[11px] font-mono text-blue-700 font-bold">{profile.playerId}</div>
+                <div className="text-xs font-bold text-white">{profile.fullName}</div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[11px] font-mono text-cyan-400 font-bold">{profile.playerId}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isOrganizer
+                    ? 'bg-amber-950/60 text-amber-300 border border-amber-500/40'
+                    : 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40'
+                    }`}>
+                    {isOrganizer ? 'Organizer' : 'Spectator (Default)'}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex items-center justify-between w-full text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-              <span>Age: <strong>{profile.age} yrs</strong></span>
-              <span className="capitalize font-bold text-slate-700">{profile.city || 'India'}</span>
+            <div className="flex items-center justify-between w-full text-[11px] text-slate-400 pt-1.5 border-t border-white/10">
+              <Link href="/profile" className="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1">
+                <span>Shift Mode in Profile</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
               <button
                 onClick={logoutUser}
-                title="Sign Out / Switch"
-                className="text-slate-400 hover:text-red-600 transition-colors p-1"
+                title="Sign Out"
+                className="text-slate-400 hover:text-rose-400 transition-colors p-1"
               >
                 <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* TWO PRIMARY ROLE OPTIONS (Glassmorphic Selection Cards) */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span>Select Your Active Mode</span>
-          </h2>
-          <span className="text-xs font-semibold text-slate-500">
-            Currently active: <strong className="text-blue-700 uppercase font-mono">{profile.role}</strong>
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Option 1: Organizer Mode Card */}
-          <div
-            onClick={() => setRole('organizer')}
-            className={`cursor-pointer glass-panel p-6 rounded-2xl border transition-all glass-panel-hover relative overflow-hidden ${
-              isOrganizer
-                ? 'ring-2 ring-amber-500/30 border-amber-300 bg-amber-50/40 shadow-xl'
-                : 'hover:border-amber-300 bg-white/70'
-            }`}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shadow-xs">
-                  <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
-                </div>
-                <div>
-                  <div className="text-xs uppercase font-extrabold tracking-wider text-amber-700">Option 1</div>
-                  <h3 className="text-lg font-black text-slate-900">Organizer Hub</h3>
-                </div>
-              </div>
-              <span className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                isOrganizer ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600'
-              }`}>
-                {isOrganizer ? 'Active Mode' : 'Switch Mode'}
-              </span>
-            </div>
-
-            <p className="text-xs text-slate-600 mb-4 leading-relaxed">
-              Create and manage sports organizations, invite up to 4 co-organizers via secure secret codes, host multiple sports simultaneously across 8 disciplines, and operate official match live scorecards.
-            </p>
-
-            <ul className="space-y-1.5 text-xs text-slate-600 mb-5">
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>Manage organizations & invite co-organizers (capped at 4)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>Simultaneous 8-sport grassroots event hosting</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>Official live scoring consoles for referees & scorers</span>
-              </li>
-            </ul>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setRole('organizer');
-              }}
-              className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all tactile-btn ${
-                isOrganizer
-                  ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-md shadow-amber-600/20'
-                  : 'bg-white border border-slate-200 text-slate-800 hover:bg-amber-50'
-              }`}
-            >
-              <span>{isOrganizer ? 'Organizer Hub Active' : 'Enter Organizer Hub'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Option 2: Viewer Mode Card */}
-          <div
-            onClick={() => setRole('viewer')}
-            className={`cursor-pointer glass-panel p-6 rounded-2xl border transition-all glass-panel-hover relative overflow-hidden ${
-              !isOrganizer
-                ? 'ring-2 ring-blue-500/30 border-blue-300 bg-blue-50/40 shadow-xl'
-                : 'hover:border-blue-300 bg-white/70'
-            }`}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shadow-xs">
-                  <Compass className="w-6 h-6 stroke-[2.5]" />
-                </div>
-                <div>
-                  <div className="text-xs uppercase font-extrabold tracking-wider text-blue-700">Option 2</div>
-                  <h3 className="text-lg font-black text-slate-900">Viewer (Spectator) Hub</h3>
-                </div>
-              </div>
-              <span className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                !isOrganizer ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600'
-              }`}>
-                {!isOrganizer ? 'Active Mode' : 'Switch Mode'}
-              </span>
-            </div>
-
-            <p className="text-xs text-slate-600 mb-4 leading-relaxed">
-              Browse the complete grassroots organization directory, view comprehensive sports lists showing which organizations host each sport, search everything in real-time, and drill down into match fixtures and live scorecards.
-            </p>
-
-            <ul className="space-y-1.5 text-xs text-slate-600 mb-5">
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span>Complete Organization List & Directory</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span>Comprehensive Sports List with hosting organizations</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span>Dedicated real-time search & tournament fixture drill-downs</span>
-              </li>
-            </ul>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setRole('viewer');
-              }}
-              className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all tactile-btn ${
-                !isOrganizer
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20'
-                  : 'bg-white border border-slate-200 text-slate-800 hover:bg-blue-50'
-              }`}
-            >
-              <span>{!isOrganizer ? 'Viewer Hub Active' : 'Enter Viewer Hub'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>
@@ -736,48 +630,40 @@ export default function HomeDashboard() {
       {isOrganizer && (
         <section className="space-y-6 pt-2">
           {/* Organizer Header & Actions */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-5 border border-white/10">
             <div>
-              <h2 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-amber-600" />
+              <h2 className="text-xl font-black text-white flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-amber-400" />
                 <span>Organizer Management Hub</span>
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-400">
                 Manage your grassroots organizations, invite up to 4 co-organizers with secret codes, and configure multi-sport tournaments.
               </p>
             </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full sm:w-auto">
               <button
                 onClick={() => setShowJoinModal(true)}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white/90 hover:bg-white text-slate-700 text-xs font-bold transition-all shadow-xs tactile-btn flex items-center gap-2"
+                className="w-full min-h-[46px] px-4 py-2.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-bold transition-all shadow-xs tactile-btn flex items-center justify-center gap-2"
               >
-                <KeyRound className="w-4 h-4 text-amber-600" />
+                <KeyRound className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Join with Secret Code</span>
               </button>
 
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/25 tactile-btn flex items-center gap-2"
+                className="w-full min-h-[46px] px-4 py-2.5 rounded-xl liquid-btn-primary text-white text-xs font-bold transition-all tactile-btn flex items-center justify-center gap-2 cursor-pointer"
               >
-                <PlusCircle className="w-4 h-4 stroke-[2.5]" />
+                <PlusCircle className="w-4 h-4 stroke-[2.5] shrink-0" />
                 <span>+ Create Organization</span>
               </button>
-
-              <Link
-                href="/matches/new"
-                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs tactile-btn flex items-center gap-2"
-              >
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>+ Score Match</span>
-              </Link>
             </div>
           </div>
 
           {/* My Organizations Grid */}
           <div className="space-y-3">
-            <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-blue-600" />
+            <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-cyan-400" />
               <span>Active Organizations Under Management</span>
             </h3>
 
@@ -785,7 +671,7 @@ export default function HomeDashboard() {
               {organizations.map((org) => {
                 const isMemberCapped = org.members.length >= (org.maxOrganizers || 4);
                 return (
-                  <div key={org.id} className="glass-panel p-5 rounded-2xl flex flex-col justify-between glass-panel-hover">
+                  <div key={org.id} className="glass-panel p-5 rounded-2xl flex flex-col justify-between glass-panel-hover border border-white/10">
                     <div className="space-y-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
@@ -793,17 +679,19 @@ export default function HomeDashboard() {
                             <img
                               src={org.logoUrl}
                               alt={org.name}
-                              className="w-12 h-12 rounded-xl object-cover border border-slate-200"
+                              loading="lazy"
+                              decoding="async"
+                              className="w-12 h-12 rounded-xl object-cover border border-white/10"
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg border border-blue-100">
+                            <div className="w-12 h-12 rounded-xl bg-cyan-950/60 text-cyan-300 flex items-center justify-center font-bold text-lg border border-cyan-500/30">
                               {org.name.charAt(0)}
                             </div>
                           )}
                           <div>
-                            <h4 className="font-extrabold text-slate-900 text-sm line-clamp-1">{org.name}</h4>
-                            <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                              <MapPin className="w-3 h-3 text-slate-400" />
+                            <h4 className="font-extrabold text-white text-sm line-clamp-1">{org.name}</h4>
+                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                              <MapPin className="w-3 h-3 text-slate-500" />
                               <span>{org.city}, {org.state}</span>
                             </div>
                           </div>
@@ -811,19 +699,19 @@ export default function HomeDashboard() {
                       </div>
 
                       {/* Secret Code Card */}
-                      <div className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/80 flex items-center justify-between">
+                      <div className="p-2.5 rounded-xl bg-[#080d22]/90 border border-white/10 flex items-center justify-between">
                         <div>
-                          <div className="text-[10px] font-bold text-slate-500 uppercase">Secret Invite Code</div>
-                          <div className="font-mono text-xs font-black text-blue-700">{org.secretCode}</div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase">Secret Invite Code</div>
+                          <div className="font-mono text-xs font-black text-cyan-400">{org.secretCode}</div>
                         </div>
                         <button
                           onClick={() => handleCopyCode(org.secretCode, org.id)}
-                          className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-xs flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/10 text-slate-200 border border-white/15 hover:bg-white/15 shadow-xs flex items-center gap-1 cursor-pointer transition-colors"
                         >
                           {copiedCodeId === org.id ? (
                             <>
-                              <Check className="w-3 h-3 text-emerald-600" />
-                              <span className="text-emerald-600 font-bold">Copied</span>
+                              <Check className="w-3 h-3 text-emerald-400" />
+                              <span className="text-emerald-400 font-bold">Copied</span>
                             </>
                           ) : (
                             <>
@@ -836,13 +724,12 @@ export default function HomeDashboard() {
 
                       {/* Co-Organizers Capacity Tracker */}
                       <div className="flex items-center justify-between text-xs pt-1">
-                        <span className="text-slate-600 flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-slate-400 flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-slate-500" />
                           Co-Organizers Roster:
                         </span>
-                        <span className={`px-2 py-0.5 rounded-full font-mono text-[11px] font-bold ${
-                          isMemberCapped ? 'bg-amber-100 text-amber-800' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        }`}>
+                        <span className={`px-2 py-0.5 rounded-full font-mono text-[11px] font-bold ${isMemberCapped ? 'bg-amber-950/60 text-amber-300 border border-amber-500/40' : 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
+                          }`}>
                           {org.members.length} / {org.maxOrganizers || 4} Slots
                         </span>
                       </div>
@@ -860,17 +747,17 @@ export default function HomeDashboard() {
                       </div>
                     </div>
 
-                    <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                    <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                       <Link
                         href={`/organizations/${org.id}`}
-                        className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                        className="text-xs font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1"
                       >
                         <span>Manage Org & Sports</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                       <Link
                         href={`/organizations/${org.id}`}
-                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-900/60"
                       >
                         + Host Sport
                       </Link>
@@ -882,18 +769,18 @@ export default function HomeDashboard() {
           </div>
 
           {/* Simultaneous Multi-Sport Engine Console */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4">
+          <div className="glass-panel p-6 rounded-2xl space-y-4 border border-white/10">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-sm font-black text-white flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-emerald-400" />
                   <span>Grassroots Multi-Sport Simultaneous Hosting Engine</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   A single organization can host and score all 8 sports concurrently with native rule engines.
                 </p>
               </div>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+              <span className="text-xs font-bold text-emerald-300 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                 8 Sports Supported
               </span>
             </div>
@@ -902,12 +789,12 @@ export default function HomeDashboard() {
               {ALL_SPORTS.map(sport => {
                 const hostingCount = organizations.filter(o => o.sports.includes(sport.id)).length;
                 return (
-                  <div key={sport.id} className="p-3.5 rounded-xl border border-white/60 bg-white/60 text-left space-y-2">
+                  <div key={sport.id} className="p-3.5 rounded-xl border border-white/10 bg-white/5 text-left space-y-2">
                     <SportBadge sport={sport.id} size="sm" />
-                    <div className="text-[11px] text-slate-500">
-                      Active in <strong>{hostingCount}</strong> organization{hostingCount !== 1 ? 's' : ''}
+                    <div className="text-[11px] text-slate-400">
+                      Active in <strong className="text-white">{hostingCount}</strong> organization{hostingCount !== 1 ? 's' : ''}
                     </div>
-                    <div className="text-[10px] text-slate-400 line-clamp-1">{sport.tagline}</div>
+                    <div className="text-[10px] text-slate-500 line-clamp-1">{sport.tagline}</div>
                   </div>
                 );
               })}
@@ -922,19 +809,19 @@ export default function HomeDashboard() {
       {!isOrganizer && (
         <section className="space-y-8 pt-2">
           {/* Dedicated Universal Real-Time Search Bar */}
-          <div className="glass-panel p-5 rounded-2xl space-y-4">
+          <div className="glass-panel p-5 rounded-2xl space-y-4 border border-white/10">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <Search className="w-4 h-4 text-blue-600" />
+                <h2 className="text-base font-black text-white flex items-center gap-2">
+                  <Search className="w-4 h-4 text-cyan-400" />
                   <span>Viewer Discovery & Search Hub</span>
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   Filter grassroots organizations, sports, and tournament fixtures across India in real-time.
                 </p>
               </div>
-              <span className="text-xs font-bold text-slate-500">
-                Found {filteredOrgs.length} Organization{filteredOrgs.length !== 1 ? 's' : ''}
+              <span className="text-xs font-bold text-slate-400">
+                Found <span className="text-white">{filteredOrgs.length}</span> Organization{filteredOrgs.length !== 1 ? 's' : ''}
               </span>
             </div>
 
@@ -947,12 +834,12 @@ export default function HomeDashboard() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search organization, sport (e.g. Cricket, Kabaddi), city, or director..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white/90 focus:bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -964,7 +851,7 @@ export default function HomeDashboard() {
                 <select
                   value={selectedSportFilter}
                   onChange={(e) => setSelectedSportFilter(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/90 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm font-medium text-white focus:outline-hidden [&>option]:bg-[#080d22] [&>option]:text-white"
                 >
                   <option value="all">All Sports ({ALL_SPORTS.length})</option>
                   {ALL_SPORTS.map(s => (
@@ -978,7 +865,7 @@ export default function HomeDashboard() {
                 <select
                   value={selectedCityFilter}
                   onChange={(e) => setSelectedCityFilter(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white/90 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm font-medium text-white focus:outline-hidden [&>option]:bg-[#080d22] [&>option]:text-white"
                 >
                   <option value="all">All Cities</option>
                   {uniqueCities.map(city => (
@@ -993,17 +880,48 @@ export default function HomeDashboard() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-blue-600" />
+                <h3 className="text-base font-black text-white flex items-center gap-2">
+                  <Trophy className="w-4 h-4 text-cyan-400" />
                   <span>Comprehensive Sports Catalog & Hosting Organizations</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   Select any sport to view the grassroots organizations currently organizing and hosting events for it.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Mobile-Friendly Quick Sport Filter Pill Carousel */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 touch-scroll">
+              <button
+                onClick={() => setSelectedSportFilter('all')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all tactile-btn shrink-0 ${
+                  selectedSportFilter === 'all'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+                }`}
+              >
+                All Sports ({ALL_SPORTS.length})
+              </button>
+              {ALL_SPORTS.map(s => {
+                const isSel = selectedSportFilter === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSelectedSportFilter(isSel ? 'all' : s.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all tactile-btn flex items-center gap-1.5 shrink-0 ${
+                      isSel
+                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                        : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{s.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Mobile Horizontal Snap Carousel / Desktop Grid */}
+            <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-3 pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 touch-scroll">
               {ALL_SPORTS.map(sport => {
                 const hostingOrgs = organizations.filter(o => o.sports.includes(sport.id));
                 const isSelected = selectedSportFilter === sport.id;
@@ -1012,25 +930,24 @@ export default function HomeDashboard() {
                   <div
                     key={sport.id}
                     onClick={() => setSelectedSportFilter(isSelected ? 'all' : sport.id)}
-                    className={`cursor-pointer glass-panel p-4 rounded-xl border transition-all glass-panel-hover flex flex-col justify-between ${
-                      isSelected
-                        ? 'border-blue-500 bg-blue-50/70 ring-2 ring-blue-500/20'
-                        : 'border-white/60 bg-white/70 hover:border-slate-300'
-                    }`}
+                    className={`cursor-pointer glass-panel p-4 rounded-xl border transition-all glass-panel-hover flex flex-col justify-between w-[80vw] max-w-[280px] shrink-0 snap-center sm:w-auto ${isSelected
+                      ? 'border-cyan-400/80 bg-cyan-950/40 ring-1 ring-cyan-400/50 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                      : 'border-white/10 bg-white/5 hover:border-white/20'
+                      }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <SportBadge sport={sport.id} size="sm" />
-                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
                           {hostingOrgs.length} Org{hostingOrgs.length !== 1 ? 's' : ''}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-500 line-clamp-1 mb-2.5">
+                      <div className="text-xs text-slate-400 line-clamp-1 mb-2.5">
                         {sport.tagline}
                       </div>
 
                       {/* List of Hosting Organizations */}
-                      <div className="space-y-1 pt-1 border-t border-slate-100">
+                      <div className="space-y-1 pt-1 border-t border-white/10">
                         <div className="text-[10px] uppercase font-bold text-slate-400">Hosting Organizations:</div>
                         {hostingOrgs.length > 0 ? (
                           <div className="space-y-1">
@@ -1039,19 +956,19 @@ export default function HomeDashboard() {
                                 key={ho.id}
                                 href={`/organizations/${ho.id}`}
                                 onClick={(e) => e.stopPropagation()}
-                                className="block text-xs font-semibold text-slate-700 hover:text-blue-600 truncate"
+                                className="block text-xs font-semibold text-slate-300 hover:text-cyan-400 truncate"
                               >
                                 • {ho.name}
                               </Link>
                             ))}
                           </div>
                         ) : (
-                          <div className="text-xs italic text-slate-400">None currently hosting</div>
+                          <div className="text-xs italic text-slate-500">None currently hosting</div>
                         )}
                       </div>
                     </div>
 
-                    <div className="mt-3 pt-2 text-[11px] font-bold text-blue-600 flex items-center justify-between">
+                    <div className="mt-3 pt-2 text-[11px] font-bold text-cyan-400 flex items-center justify-between">
                       <span>{isSelected ? 'Showing matches below' : 'Filter by this sport'}</span>
                       <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'rotate-90' : ''}`} />
                     </div>
@@ -1065,21 +982,21 @@ export default function HomeDashboard() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-blue-600" />
+                <h3 className="text-base font-black text-white flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-cyan-400" />
                   <span>Grassroots Organization Directory</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   Browse verified sports academies, clubs, and federations with multi-sport programs.
                 </p>
               </div>
             </div>
 
             {filteredOrgs.length === 0 ? (
-              <div className="glass-panel p-8 text-center space-y-3">
-                <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
-                <h4 className="font-bold text-slate-900">No organizations match your search</h4>
-                <p className="text-xs text-slate-500">
+              <div className="glass-panel p-8 text-center space-y-3 border border-white/10">
+                <AlertCircle className="w-8 h-8 text-amber-400 mx-auto" />
+                <h4 className="font-bold text-white">No organizations match your search</h4>
+                <p className="text-xs text-slate-400">
                   Try clearing the search query or resetting the sport and city filters.
                 </p>
                 <button
@@ -1088,7 +1005,7 @@ export default function HomeDashboard() {
                     setSelectedSportFilter('all');
                     setSelectedCityFilter('all');
                   }}
-                  className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold"
+                  className="px-4 py-2 rounded-xl liquid-btn-primary text-white text-xs font-bold cursor-pointer"
                 >
                   Reset All Filters
                 </button>
@@ -1099,7 +1016,7 @@ export default function HomeDashboard() {
                   return (
                     <div
                       key={org.id}
-                      className="glass-panel p-5 rounded-2xl flex flex-col justify-between glass-panel-hover"
+                      className="glass-panel p-5 rounded-2xl flex flex-col justify-between glass-panel-hover border border-white/10"
                     >
                       <div className="space-y-3.5">
                         <div className="flex items-start gap-3">
@@ -1107,36 +1024,38 @@ export default function HomeDashboard() {
                             <img
                               src={org.logoUrl}
                               alt={org.name}
-                              className="w-12 h-12 rounded-xl object-cover border border-slate-200"
+                              loading="lazy"
+                              decoding="async"
+                              className="w-12 h-12 rounded-xl object-cover border border-white/10"
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg border border-blue-100">
+                            <div className="w-12 h-12 rounded-xl bg-cyan-950/60 text-cyan-300 flex items-center justify-center font-bold text-lg border border-cyan-500/30">
                               {org.name.charAt(0)}
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-extrabold text-slate-900 text-sm line-clamp-1">{org.name}</h4>
-                            <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                              <MapPin className="w-3 h-3 text-slate-400" />
+                            <h4 className="font-extrabold text-white text-sm line-clamp-1">{org.name}</h4>
+                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                              <MapPin className="w-3 h-3 text-slate-500" />
                               <span>{org.city}, {org.state}</span>
                             </div>
-                            <div className="text-[11px] text-slate-500 mt-0.5">
-                              Lead: <span className="font-medium text-slate-700">{org.creatorName}</span>
+                            <div className="text-[11px] text-slate-400 mt-0.5">
+                              Lead: <span className="font-medium text-slate-200">{org.creatorName}</span>
                             </div>
                           </div>
                         </div>
 
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
                           {org.description}
                         </p>
 
                         {/* Co-Organizers count */}
-                        <div className="flex items-center justify-between text-xs py-1 border-y border-slate-100">
-                          <span className="text-slate-500 flex items-center gap-1">
-                            <Users className="w-3.5 h-3.5 text-slate-400" />
+                        <div className="flex items-center justify-between text-xs py-1 border-y border-white/10">
+                          <span className="text-slate-400 flex items-center gap-1">
+                            <Users className="w-3.5 h-3.5 text-slate-500" />
                             Co-Organizers
                           </span>
-                          <span className="font-mono text-[11px] font-bold text-slate-700">
+                          <span className="font-mono text-[11px] font-bold text-slate-300">
                             {org.members.length} / {org.maxOrganizers || 4} Members
                           </span>
                         </div>
@@ -1154,10 +1073,10 @@ export default function HomeDashboard() {
                         </div>
                       </div>
 
-                      <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                      <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                         <Link
                           href={`/organizations/${org.id}`}
-                          className="w-full py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                          className="w-full py-2.5 px-3 rounded-xl bg-cyan-950/50 hover:bg-cyan-900/50 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-[0_0_15px_rgba(6,182,212,0.15)]"
                         >
                           <span>Explore Organization & Tournaments</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -1169,55 +1088,38 @@ export default function HomeDashboard() {
               </div>
             )}
           </div>
-
-          {/* Quick Access to Points Tables & Fixtures */}
-          <div className="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
-                <Table2 className="w-4 h-4 text-blue-600" />
-                <span>Tournament Points Tables & Standings</span>
-              </h3>
-              <p className="text-xs text-slate-500">
-                View current league standings, Net Run Rate (NRR) in Cricket, score differentials in Kabaddi, and rally ratios in Volleyball.
-              </p>
-            </div>
-            <Link
-              href="/standings"
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-500/25 tactile-btn flex items-center gap-1.5 whitespace-nowrap"
-            >
-              <span>View Points Tables</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
         </section>
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL: CREATE ORGANIZATION */}
+      {/* MODAL: CREATE ORGANIZATION (MOBILE BOTTOM SHEET) */}
       {/* ========================================================================= */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="glass-panel max-w-lg w-full p-6 sm:p-8 rounded-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="liquid-glass max-w-lg w-full p-5 sm:p-8 rounded-t-3xl sm:rounded-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto border-t sm:border border-white/20 mobile-bottom-sheet">
+            {/* Mobile Sheet Drag Indicator */}
+            <div className="w-12 h-1.5 bg-white/25 rounded-full mx-auto mb-4 sm:hidden" />
+
             <button
               onClick={() => setShowCreateModal(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 text-slate-400 hover:text-white p-1 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-cyan-950/60 text-cyan-400 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                 <Building2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">Create Sports Organization</h3>
-                <p className="text-xs text-slate-500">Setup your club, academy, or grassroots tournament hub</p>
+                <h3 className="text-lg font-black text-white">Create Sports Organization</h3>
+                <p className="text-xs text-slate-400">Setup your club, academy, or grassroots tournament hub</p>
               </div>
             </div>
 
             <form onSubmit={handleCreateSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Organization Name *
                 </label>
                 <input
@@ -1226,13 +1128,13 @@ export default function HomeDashboard() {
                   value={newOrgName}
                   onChange={(e) => setNewOrgName(e.target.value)}
                   placeholder="e.g. Bangalore Grassroots Sports Club"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Lead Organizer Name *
                   </label>
                   <input
@@ -1240,11 +1142,11 @@ export default function HomeDashboard() {
                     required
                     value={newCreatorName}
                     onChange={(e) => setNewCreatorName(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     Organizer Phone *
                   </label>
                   <input
@@ -1252,13 +1154,13 @@ export default function HomeDashboard() {
                     required
                     value={newCreatorPhone}
                     onChange={(e) => setNewCreatorPhone(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white focus:outline-hidden"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Custom Org Display Name (Optional)
                 </label>
                 <input
@@ -1266,16 +1168,16 @@ export default function HomeDashboard() {
                   value={newOrgDisplayName}
                   onChange={(e) => setNewOrgDisplayName(e.target.value)}
                   placeholder="e.g. Coach Rajesh (Lead Director)"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-500 mt-1 block">
                   Custom title for you within this specific organization.
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     City *
                   </label>
                   <input
@@ -1283,11 +1185,11 @@ export default function HomeDashboard() {
                     required
                     value={newCity}
                     onChange={(e) => setNewCity(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                     State *
                   </label>
                   <input
@@ -1295,16 +1197,16 @@ export default function HomeDashboard() {
                     required
                     value={newState}
                     onChange={(e) => setNewState(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white focus:outline-hidden"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Sports to Host (Select Multiple)
                 </label>
-                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 border border-slate-200 rounded-xl bg-white/70">
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 border border-white/10 rounded-xl bg-slate-900/60">
                   {ALL_SPORTS.map((sport) => {
                     const isSelected = selectedSports.includes(sport.id);
                     return (
@@ -1312,14 +1214,13 @@ export default function HomeDashboard() {
                         type="button"
                         key={sport.id}
                         onClick={() => toggleSportSelection(sport.id)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-left flex items-center justify-between border transition-all ${
-                          isSelected
-                            ? 'bg-blue-50 border-blue-400 text-blue-800'
-                            : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                        }`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-left flex items-center justify-between border transition-all cursor-pointer ${isSelected
+                          ? 'bg-cyan-950/60 border-cyan-400 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                          : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                          }`}
                       >
                         <span>{sport.name}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-blue-600" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
                       </button>
                     );
                   })}
@@ -1327,7 +1228,7 @@ export default function HomeDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Description
                 </label>
                 <textarea
@@ -1335,13 +1236,13 @@ export default function HomeDashboard() {
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="Grassroots sports hub dedicated to youth tournaments..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
               </div>
 
               {/* Cloudinary Logo Uploader */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Organization Logo
                 </label>
                 <ImageUploader
@@ -1355,13 +1256,13 @@ export default function HomeDashboard() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50"
+                  className="px-4 py-2.5 rounded-xl border border-white/15 text-slate-300 text-xs font-bold hover:bg-white/10 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-500/25 tactile-btn"
+                  className="px-5 py-2.5 rounded-xl liquid-btn-primary text-white text-xs font-bold tactile-btn cursor-pointer"
                 >
                   Create & Generate Secret Code
                 </button>
@@ -1372,34 +1273,37 @@ export default function HomeDashboard() {
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL: JOIN VIA SECRET CODE */}
+      {/* MODAL: JOIN VIA SECRET CODE (MOBILE BOTTOM SHEET) */}
       {/* ========================================================================= */}
       {showJoinModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="glass-panel max-w-md w-full p-6 sm:p-8 rounded-2xl shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="liquid-glass max-w-md w-full p-5 sm:p-8 rounded-t-3xl sm:rounded-2xl shadow-2xl relative border-t sm:border border-white/20 mobile-bottom-sheet">
+            {/* Mobile Sheet Drag Indicator */}
+            <div className="w-12 h-1.5 bg-white/25 rounded-full mx-auto mb-4 sm:hidden" />
+
             <button
               onClick={() => {
                 setShowJoinModal(false);
                 setJoinStatus(null);
               }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 text-slate-400 hover:text-white p-1 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-amber-950/60 text-amber-400 border border-amber-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.3)]">
                 <KeyRound className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">Join as Co-Organizer</h3>
-                <p className="text-xs text-slate-500">Up to 4 co-organizers per organization</p>
+                <h3 className="text-lg font-black text-white">Join as Co-Organizer</h3>
+                <p className="text-xs text-slate-400">Up to 4 co-organizers per organization</p>
               </div>
             </div>
 
             <form onSubmit={handleJoinSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Secret Code *
                 </label>
                 <input
@@ -1408,12 +1312,12 @@ export default function HomeDashboard() {
                   value={joinSecretCode}
                   onChange={(e) => setJoinSecretCode(e.target.value.toUpperCase())}
                   placeholder="e.g. ORG-APEX or ORG-YOUTH"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 font-mono text-sm font-bold uppercase focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input font-mono text-sm font-bold uppercase text-cyan-300 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Your Custom Display Name *
                 </label>
                 <input
@@ -1422,12 +1326,12 @@ export default function HomeDashboard() {
                   value={joinDisplayName}
                   onChange={(e) => setJoinDisplayName(e.target.value)}
                   placeholder="e.g. Coach Ananya (Tournament Director)"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
                   Phone Number
                 </label>
                 <input
@@ -1435,20 +1339,19 @@ export default function HomeDashboard() {
                   value={joinPhone}
                   onChange={(e) => setJoinPhone(e.target.value)}
                   placeholder="+91 98450 67890"
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white/90 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
                 />
               </div>
 
               {joinStatus && (
-                <div className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
-                  joinStatus.success
-                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                }`}>
+                <div className={`p-3 rounded-xl text-xs flex items-center gap-2 ${joinStatus.success
+                  ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                  : 'bg-rose-950/60 text-rose-300 border border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.2)]'
+                  }`}>
                   {joinStatus.success ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   ) : (
-                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                   )}
                   <span>{joinStatus.message}</span>
                 </div>
@@ -1461,13 +1364,13 @@ export default function HomeDashboard() {
                     setShowJoinModal(false);
                     setJoinStatus(null);
                   }}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50"
+                  className="px-4 py-2.5 rounded-xl border border-white/15 text-slate-300 text-xs font-bold hover:bg-white/10 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-500/25 tactile-btn"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)] tactile-btn cursor-pointer"
                 >
                   Verify & Join
                 </button>
